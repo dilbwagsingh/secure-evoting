@@ -17,7 +17,7 @@ function App() {
               <NavLink to="/">Home</NavLink>
             </li>
             <li>
-              <NavLink to="/register">Register with CTF</NavLink>
+              <NavLink to="/register">Register</NavLink>
             </li>
             <li>
               <NavLink to="/vote">Cast Vote</NavLink>
@@ -29,13 +29,13 @@ function App() {
               <NavLink to="/admin">Admin Panel</NavLink>
             </li>
           </ul>
-          <div className="content">
-            <Route exact path="/" component={Home} />
-            <Route exact path="/register" component={Register} />
-            <Route exact path="/vote" component={Vote} />
-            <Route exact path="/results" component={Results} />
-            <Route exact path="/admin" component={Admin} />
-          </div>
+        </div>
+        <div className="content">
+          <Route exact path="/" component={Home} />
+          <Route path="/register" component={Register} />
+          <Route path="/vote" component={Vote} />
+          <Route path="/results" component={Results} />
+          <Route path="/admin" component={Admin} />
         </div>
       </HashRouter>
     </div>

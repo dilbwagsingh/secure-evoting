@@ -1,25 +1,31 @@
 import React from "react";
 
+/* 
+To dos-
+1. Replace hardcoded constituency options with backend API call
+2. Readup about how to implement assymetric key generation for verifing voter identity
+
+*/
+
 function Register() {
   return (
     <div>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cupiditate
-        tempora illo beatae nam perferendis praesentium delectus quidem
-        aspernatur a accusamus odit magnam, iste inventore tenetur itaque dolor
-        amet quaerat! Eum veritatis odio sapiente quod nihil nostrum excepturi.
-        Est illo eveniet officiis impedit. Tempore magnam pariatur explicabo aut
-        libero! Dolores, hic repudiandae. Beatae earum pariatur laudantium
-        delectus, vel quod omnis? Totam magni quibusdam officia nulla est nobis,
-        reprehenderit fuga minima et! Lorem ipsum dolor sit amet, consectetur
-        adipisicing elit. Cupiditate tempora illo beatae nam perferendis
-        praesentium delectus quidem aspernatur a accusamus odit magnam, iste
-        inventore tenetur itaque dolor amet quaerat! Eum veritatis odio sapiente
-        quod nihil nostrum excepturi. Est illo eveniet officiis impedit. Tempore
-        magnam pariatur explicabo aut libero! Dolores, hic repudiandae. Beatae
-        earum pariatur laudantium delectus, vel quod omnis? Totam magni
-        quibusdam officia nulla est nobis, reprehenderit fuga minima et!
-      </p>
+      <form class="container" action="/server-side-form-page" method="post">
+        <label>Name:</label> <br />
+        <input type="text" id="name" name="user_name" spellCheck="false" />
+        <br />
+        <label htmlFor="aadhar">Aadhar number:</label> <br />
+        <input type="number" id="aadhar" name="aadhar_number" /> <br />
+        <p>
+          <label>Select list</label>
+          <select id="myList">
+            <option value="1">one</option>
+            <option value="2">two</option>
+            <option value="3">three</option>
+            <option value="4">four</option>
+          </select>
+        </p>
+      </form>
     </div>
   );
 }

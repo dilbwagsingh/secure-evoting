@@ -2,14 +2,6 @@
   text-align: center;
 }
 
-.App-header {
-  font-size: 300;
-}
-
-.navbar {
-  display: flex;
-}
-
 ul.header li {
   list-style-type: none;
   margin: 0;
@@ -18,7 +10,7 @@ ul.header {
   display: flex;
   flex-direction: row;
   background-color: #111;
-  padding: 0;
+  padding: 15px;
   margin: 0;
 }
 ul.header li a {
@@ -26,5 +18,4 @@ ul.header li a {
   font-weight: bold;
   text-decoration: none;
   padding: 20px;
-  display: inline-block;
 }
