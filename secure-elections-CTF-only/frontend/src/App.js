@@ -20,13 +20,13 @@ function App() {
               <NavLink to="/register">Register</NavLink>
             </li>
             <li>
-              <NavLink to="/vote">Cast Vote</NavLink>
+              <NavLink to="/vote">Vote</NavLink>
             </li>
             <li>
               <NavLink to="/results">Results</NavLink>
             </li>
             <li>
-              <NavLink to="/admin">Admin Panel</NavLink>
+              <NavLink to="/admin">Admin</NavLink>
             </li>
           </ul>
         </div>

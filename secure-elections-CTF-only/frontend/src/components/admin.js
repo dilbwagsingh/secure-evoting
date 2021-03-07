@@ -3,10 +3,19 @@ import React from "react";
 function Admin() {
   return (
     <div>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cupiditate
-        tempora illo beatae nam perferendis praesentium delectus quidem.
-      </p>
+      <form
+        class="container"
+        action="/server-side-admin-login-page"
+        method="post"
+      >
+        <label>Username:</label> <br />
+        <input type="text" id="username" spellCheck="false" />
+        <br />
+        <label>Password:</label> <br />
+        <input type="text" id="password" spellCheck="false" />
+        <br />
+        <button>Register</button>
+      </form>
     </div>
   );
 }

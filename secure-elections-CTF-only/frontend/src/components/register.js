@@ -10,22 +10,19 @@ To dos-
 function Register() {
   return (
     <div>
-      <form class="container" action="/server-side-form-page" method="post">
-        <label>Name:</label> <br />
-        <input type="text" id="name" name="user_name" spellCheck="false" />
-        <br />
-        <label htmlFor="aadhar">Aadhar number:</label> <br />
-        <input type="number" id="aadhar" name="aadhar_number" /> <br />
-        <p>
-          <label>Select list</label>
-          <select id="myList">
-            <option value="1">one</option>
-            <option value="2">two</option>
-            <option value="3">three</option>
-            <option value="4">four</option>
-          </select>
-        </p>
-      </form>
+      <div>
+        <h3>Fill out your details:</h3>
+        <form
+          class="container"
+          action="/server-side-register-page"
+          method="post"
+        >
+          <label>Name:</label> <br />
+          <input type="text" id="name" name="user_name" spellCheck="false" />
+          <br />
+          <button>Register</button>
+        </form>
+      </div>
     </div>
   );
 }
