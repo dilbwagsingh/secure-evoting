@@ -1,6 +1,7 @@
-import { Route, NavLink, HashRouter } from "react-router-dom";
+import { Route, HashRouter } from "react-router-dom";
 
 import "./App.css";
+import Navbar from "./components/navbar";
 import Admin from "./components/admin";
 import Home from "./components/home";
 import Register from "./components/register";
@@ -11,25 +12,7 @@ function App() {
   return (
     <div className="App">
       <HashRouter>
-        <div>
-          <ul className="header">
-            <li>
-              <NavLink to="/">Home</NavLink>
-            </li>
-            <li>
-              <NavLink to="/register">Register</NavLink>
-            </li>
-            <li>
-              <NavLink to="/vote">Vote</NavLink>
-            </li>
-            <li>
-              <NavLink to="/results">Results</NavLink>
-            </li>
-            <li>
-              <NavLink to="/admin">Admin</NavLink>
-            </li>
-          </ul>
-        </div>
+        <Navbar />
         <div className="content">
           <Route exact path="/" component={Home} />
           <Route path="/register" component={Register} />
