@@ -3,7 +3,8 @@ import React from "react";
 function Vote() {
   return (
     <div>
-      <form class="container">
+      <h3>Fill the required info:</h3>
+      <form className="container">
         <label>Enter your choice:</label> <br />
         <input type="text" id="choice" name="choice" spellCheck="false" />
         <br />

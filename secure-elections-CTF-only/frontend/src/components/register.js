@@ -13,7 +13,7 @@ function Register() {
       <div>
         <h3>Fill out your details:</h3>
         <form
-          class="container"
+          className="container"
           action="/server-side-register-page"
           method="post"
         >

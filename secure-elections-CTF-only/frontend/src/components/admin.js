@@ -4,7 +4,7 @@ function Admin() {
   return (
     <div>
       <form
-        class="container"
+        className="container"
         action="/server-side-admin-login-page"
         method="post"
       >

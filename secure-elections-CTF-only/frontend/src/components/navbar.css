@@ -1,17 +1,35 @@
-ul.header li {
-  list-style-type: none;
-  margin: 0;
-}
-ul.header {
-  display: flex;
-  flex-direction: row;
-  background-color: #111;
-  padding: 15px;
-  margin: 0;
-}
-ul.header li a {
-  color: #fff;
-  font-weight: bold;
+@import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
+
+li,
+a {
+  font-family: "Montserrat", sans-serif;
+  color: #ecf0f1;
+  font-size: 18px;
+  font-weight: 500;
   text-decoration: none;
-  padding: 20px;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #111;
+  padding: 5px 5%;
+}
+
+.nav_links {
+  list-style: none;
+}
+
+.nav_links li {
+  display: inline-block;
+  padding: 0 20px;
+}
+
+.nav_links li a {
+  transition: all 0.3s ease 0s;
+}
+
+.nav_links li a:hover {
+  color: #0e8b99;
 }
