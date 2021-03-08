@@ -1,15 +1,16 @@
 import React from "react";
+import styles from "./form.module.css";
 
 function Vote() {
   return (
-    <div>
-      <h3>Fill the required info:</h3>
-      <form className="container">
-        <label>Enter your choice:</label> <br />
+    <div className={styles.container}>
+      <h3>Voting Draft:</h3>
+      <form >
+        <label>Choice:</label> <br />
         <input type="text" id="choice" name="choice" spellCheck="false" />
         <br />
-        <label>Enter your private key:</label> <br />
-        <input type="number" id="private_key" /> <br />
+        <label>Private key:</label> <br />
+        <input type="text" id="private_key" /> <br />
         <button>Vote</button>
       </form>
     </div>

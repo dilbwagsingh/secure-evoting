@@ -1,18 +1,16 @@
 import React from "react";
+import styles from "./form.module.css";
 
 function Admin() {
   return (
-    <div>
-      <form
-        className="container"
-        action="/server-side-admin-login-page"
-        method="post"
-      >
+    <div className={styles.container}>
+      <h3>Details:</h3>
+      <form>
         <label>Username:</label> <br />
         <input type="text" id="username" spellCheck="false" />
         <br />
         <label>Password:</label> <br />
-        <input type="text" id="password" spellCheck="false" />
+        <input type="password" id="password" spellCheck="false" />
         <br />
         <button>Register</button>
       </form>

@@ -11,10 +11,10 @@ a {
 
 header {
   display: flex;
-  justify-content: space-between;
+  justify-content: safe;
   align-items: center;
   background-color: #111;
-  padding: 5px 5%;
+  padding: 5px 5px;
 }
 
 .nav_links {

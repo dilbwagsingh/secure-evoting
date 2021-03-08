@@ -1,12 +1,12 @@
 import React from "react";
-import "./navbar.css";
+import styles from "./navbar.module.css";
 import { NavLink } from "react-router-dom";
 
 function Navbar() {
   return (
     <header>
       <nav>
-        <ul className="nav_links">
+        <ul className={styles.nav_links}>
           <li>
             <NavLink to="/">Home</NavLink>
           </li>
@@ -19,10 +19,6 @@ function Navbar() {
           <li>
             <NavLink to="/results">Results</NavLink>
           </li>
-        </ul>
-      </nav>
-      <nav>
-        <ul className="nav_links">
           <li>
             <NavLink to="/admin">Admin</NavLink>
           </li>
