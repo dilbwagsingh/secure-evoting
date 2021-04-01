@@ -20,7 +20,7 @@ const voter = {
 };
 
 const CTF = {
-  signingKey: BS.keyGeneration({ b: 128 }),
+  signingKey: BS.keyGeneration({ b: 1024 }),
   registeredVoters: [],
 };
 
@@ -37,27 +37,27 @@ voter.e_CTF = CTF.signingKey.keyPair.e.toString();
 // console.log(`CTF's e: ${voter.e_CTF}\n`);
 
 // Voter creates say 10 properly formed legit votes
-const numOfVotes = 10;
-const votes = [];
-for (let i = 0; i < numOfVotes - 1; i++) {
-  votes.push("randomGeneratedText");
-}
-votes.push(voter.vote);
+// const numOfVotes = 10;
+// const votes = [];
+// for (let i = 0; i < numOfVotes - 1; i++) {
+//   votes.push("randomGeneratedText");
+// }
+vote = voter.vote;
 // console.log(`Votes array created:\n${votes}\n`);
 
 // Voter blinds these votes individually
-const bVotes = [];
-const bFactors = [];
-votes.forEach((vote) => {
-  const { blinded, r } = BS.blind({
-    message: vote,
-    N: voter.n_CTF,
-    E: voter.e_CTF,
-  });
-
-  bVotes.push(blinded);
-  bFactors.push(r);
+// const bVotes = [];
+// const bFactors = [];
+// votes.forEach((vote) => {
+const { blinded, r } = BS.blind({
+  message: vote,
+  N: voter.n_CTF,
+  E: voter.e_CTF,
 });
+
+// bVotes.push(blinded);
+// bFactors.push(r);
+// });
 
 // console.log(`Blinded Votes: ${bVotes}\n`);
 // console.log(`Blinding Factors:  ${bFactors}\n`);
@@ -80,18 +80,19 @@ votes.forEach((vote) => {
 // console.log(b.toString() === messageToHashInt(voter.vote).mod(N));
 
 // Sends the blinded votes array to the CTF for signing
-const signedBlindedVotes = [];
+// const signedBlindedVotes = [];
+let signed;
 if (voter.voterID in CTF.registeredVoters)
   console.log("Already applied, cannot apply again");
 else {
-  bVotes.forEach((bVote) => {
-    CTF.blindedVote = bVote;
-    const signed = BS.sign({
-      blinded: CTF.blindedVote,
-      key: CTF.signingKey,
-    });
-    signedBlindedVotes.push(signed);
+  // bVotes.forEach((bVote) => {
+  CTF.blindedVote = blinded;
+  signed = BS.sign({
+    blinded: CTF.blindedVote,
+    key: CTF.signingKey,
   });
+  // signedBlindedVotes.push(signed);
+  // });
   // The CTF registers the unique voterID for later verification and duplication purposes
   CTF.registeredVoters.push(voter.voterID);
   // console.log("Done registration!!");
@@ -99,27 +100,27 @@ else {
 // console.log(`Signed blinded votes: ${signedBlindedVotes}\n`);
 
 // Voter unblinds the signed votes received from the CTF
-const signedUnblindedVotes = [];
-signedBlindedVotes.forEach((signedBlindedVote, i) => {
-  const unblinded = BS.unblind({
-    signed: signedBlindedVote,
-    N: voter.n_CTF,
-    r: bFactors[i],
-  });
-  signedUnblindedVotes.push(unblinded);
+// const signedUnblindedVotes = [];
+// signedBlindedVotes.forEach((signedBlindedVote, i) => {
+const unblinded = BS.unblind({
+  signed: signed,
+  N: voter.n_CTF,
+  r: r,
 });
+// signedUnblindedVotes.push(unblinded);
+// });
 // console.log(signedUnblindedVotes);
 
 // Voter verifies if the signatures of the CTF are correct or not
 let ok = true;
-signedUnblindedVotes.forEach((signedUnblindedVote, i) => {
-  ok &= BS.verify({
-    unblinded: signedUnblindedVote,
-    N: voter.n_CTF,
-    E: voter.e_CTF,
-    message: votes[i],
-  });
+// signedUnblindedVotes.forEach((signedUnblindedVote, i) => {
+ok = BS.verify({
+  unblinded: unblinded,
+  N: voter.n_CTF,
+  E: voter.e_CTF,
+  message: vote,
 });
+// });
 // Finally ok should be true/1 of it is actually signed by the CTF
 // console.log(ok);
 
@@ -129,7 +130,7 @@ const publicKeyCTF = new nodeRSA(keyCTF.exportKey("public"));
 const privateKeyCTF = new nodeRSA(keyCTF.exportKey("private"));
 
 // Voter encrypts his signed vote using the CTF's public key
-const votersChoice = signedUnblindedVotes[9];
+const votersChoice = unblinded;
 const voteString = voter.voterID + votersChoice;
 const encryptedVote = publicKeyCTF.encrypt(voteString, "base64");
 // console.log(encryptedVote);
@@ -160,8 +161,7 @@ console.log(
 const verdict = BS.verify2({
   unblinded: candidateVotedFor,
   key: CTF.signingKey,
-  message:
-    votes[9] /*For this we can try all possible candidates, (since the CTF doesnot know for whom the particular voter voted); if anyone returns true then the sign is vallid and teh choice is recorded */,
+  message: vote /*For this we can try all possible candidates, (since the CTF doesnot know for whom the particular voter voted); if anyone returns true then the sign is vallid and teh choice is recorded */,
 });
 
 // If verdict is true then the vote is valid and recorded else discarded
