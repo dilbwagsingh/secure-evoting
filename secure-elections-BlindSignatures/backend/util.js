@@ -1,7 +1,6 @@
 const BS = require("blind-signatures");
 const nodeRSA = require("node-rsa");
 const { createHash } = require("crypto");
-const { PassThrough } = require("stream");
 
 // retruns a voterID which has a fixed length of 64
 const generateVoterID = () => {
@@ -80,20 +79,21 @@ const verifyVoteFormat = (decryptedVote, registeredVoters) => {
   return { registered: false, receivedVoterID: null, candidateVotedFor: null };
 };
 
-const verifySignatureCTF = (candidateVotedFor, signingKey, allCandidates) => {
+const verifySignatureCTF = (candidateVotedFor, signingKey, candidatesList) => {
   let verdict = false,
-    votedCandidate = null;
-  allCandidates.forEach((candidate) => {
+    votedCandidateID = null;
+  // Assuming each candidate has a unique name, maybe later add logic for checking by candidateID
+  candidatesList.forEach((candidate) => {
     const ok = BS.verify2({
       unblinded: candidateVotedFor,
       key: signingKey,
-      message: candidate,
+      message: candidate.candidateName,
     });
-    if (ok) votedCandidate = candidate;
+    if (ok) votedCandidateID = candidate.candidateID;
     verdict |= ok;
   });
 
-  return { verdict, votedCandidate };
+  return { verdict, votedCandidateID };
 };
 
 module.exports = {

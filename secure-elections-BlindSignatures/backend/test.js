@@ -42,7 +42,7 @@ voter.e_CTF = CTF.signingKey.keyPair.e.toString();
 // for (let i = 0; i < numOfVotes - 1; i++) {
 //   votes.push("randomGeneratedText");
 // }
-vote = voter.vote;
+const vote = voter.vote;
 // console.log(`Votes array created:\n${votes}\n`);
 
 // Voter blinds these votes individually

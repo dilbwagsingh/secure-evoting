@@ -22,7 +22,6 @@
 
 */
 
-const { sign } = require("blind-signatures");
 const express = require("express");
 const mongoose = require("mongoose");
 const nodeRSA = require("node-rsa");
@@ -56,8 +55,9 @@ mongoose
   });
 
 // Add candidateID for name clashes
-const resultSchema = new Schema({
+const candidateSchema = new Schema({
   candidateName: String,
+  candidateID: Number,
   votesReceived: {
     type: Number,
     default: 0,
@@ -78,7 +78,7 @@ const CTFSchema = new Schema({
   castingKeyPrivate: String,
 });
 
-const resultCollection = mongoose.model("Result", resultSchema);
+const candidateCollection = mongoose.model("Result", candidateSchema);
 const voterCollection = mongoose.model("Voter", voterSchema);
 const CTFCollection = mongoose.model("CTF", CTFSchema);
 
@@ -88,16 +88,17 @@ app.get("/voters", async (req, res) => {
 });
 
 app.post("/add-candidate", async (req, res) => {
-  const newCandidate = new resultCollection({
+  const newCandidate = new candidateCollection({
     candidateName: req.body.candidateName,
+    candidateID: req.body.candidateID,
   });
   await newCandidate.save();
   return res.json("New candidate resigtered");
 });
 
-app.get("/results", async (req, res) => {
-  const results = await resultCollection.find();
-  return res.json(results);
+app.get("/get-candidates", async (req, res) => {
+  const candidatesList = await candidateCollection.find();
+  return res.json(candidatesList);
 });
 
 app.get("/ctf-public-keys", async (req, res) => {
@@ -120,14 +121,23 @@ app.post("/register", async (req, res) => {
 });
 
 app.post("/cast-vote", async (req, res) => {
-  const voterName = req.body.voterName;
   const voterID = req.body.voterID;
   const vote = req.body.votedFor;
+  // const voteID = req.body.votedForCandidateID; /* Add candidateID for casting vote instead of name*/
 
   let registeredVoters = await voterCollection.find();
+  let eligible = false;
   for (let i = 0; i < registeredVoters.length; ++i) {
-    if (registeredVoters[i].voterID.indexOf(voterID) >= 0)
-      return res.json("You already voted once!!!");
+    if (
+      registeredVoters[i].voterID.indexOf(voterID) >= 0 &&
+      registeredVoters[i].voteCasted === false
+    )
+      eligible = true;
+  }
+  if (eligible) {
+    console.log("You are eligible to vote...Proceeding further...");
+  } else {
+    return res.json("Either you already voted or you are not registered!!!");
   }
 
   const { signingKey, CTFKey } = generateCTFKeys();
@@ -138,12 +148,6 @@ app.post("/cast-vote", async (req, res) => {
   const { blindedVote, blindingFactor } = blindVote(vote, n_CTF, e_CTF);
 
   const signedBlindedVote = signBlindedVote(blindedVote, signingKey);
-  const newVoter = new voterCollection({
-    voterName: voterName,
-    voterID: voterID,
-  });
-  await newVoter.save();
-  registeredVoters = await voterCollection.find();
 
   const value = unblindAndVerifySignature(
     signedBlindedVote,
@@ -171,26 +175,22 @@ app.post("/cast-vote", async (req, res) => {
   );
 
   if (registered) {
-    const results = await resultCollection.find();
-    const allCandidates = [];
-    results.forEach((result) => {
-      allCandidates.push(result.candidateName);
-    });
-    const { verdict, votedCandidate } = verifySignatureCTF(
+    const candidatesList = await candidateCollection.find();
+    const { verdict, votedCandidateID } = verifySignatureCTF(
       candidateVotedFor,
       signingKey,
-      allCandidates
+      candidatesList
     );
 
     if (verdict) {
       // update candidate vote count in DB
-      await resultCollection.findOneAndUpdate(
-        { candidateName: votedCandidate },
+      await candidateCollection.findOneAndUpdate(
+        { candidateID: votedCandidateID },
         { $inc: { votesReceived: 1 } }
       );
       // update voter's voted status
       await voterCollection.findOneAndUpdate(
-        { voterID: voterID },
+        { voterID: receivedVoterID },
         { voteCasted: true }
       );
       return res.json("Successful!!!");
