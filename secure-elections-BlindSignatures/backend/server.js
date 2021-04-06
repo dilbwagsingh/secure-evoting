@@ -111,9 +111,20 @@ app.get("/get-voterid", async (req, res) => {
 });
 
 app.post("/register", async (req, res) => {
+  const registeredVoters = await voterCollection.find();
+  const voterName = req.body.voterName;
+  const voterID = req.body.voterID;
+
+  let isNewVoter = true;
+  registeredVoters.forEach((registeredVoter) => {
+    if (registeredVoter.voterID === voterID) isNewVoter = false;
+  });
+
+  if (!isNewVoter) return res.json("Already registered!!!");
+
   const newVoter = new voterCollection({
-    voterName: req.body.voterName,
-    voterID: req.body.voterID,
+    voterName: voterName,
+    voterID: voterID,
   });
   await newVoter.save();
   return res.json(
