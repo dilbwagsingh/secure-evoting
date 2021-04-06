@@ -35,8 +35,8 @@ const {
   verifySignatureCTF,
   verifyVoteFormat,
 } = require("./util");
-const app = express();
 
+const app = express();
 app.use(express.json());
 
 const db = "mongodb://localhost:27017/blindSecureElections";
@@ -54,7 +54,6 @@ mongoose
     console.log(err);
   });
 
-// Add candidateID for name clashes
 const candidateSchema = new Schema({
   candidateName: String,
   candidateID: Number,
@@ -71,16 +70,16 @@ const voterSchema = new Schema({
     default: false,
   },
 });
-const CTFSchema = new Schema({
-  signingKeyPublic: String,
-  signingKeyPrivate: String,
-  castingKeyPublic: String,
-  castingKeyPrivate: String,
-});
+// const CTFSchema = new Schema({
+//   signingKeyPublic: String,
+//   signingKeyPrivate: String,
+//   castingKeyPublic: String,
+//   castingKeyPrivate: String,
+// });
 
 const candidateCollection = mongoose.model("Result", candidateSchema);
 const voterCollection = mongoose.model("Voter", voterSchema);
-const CTFCollection = mongoose.model("CTF", CTFSchema);
+// const CTFCollection = mongoose.model("CTF", CTFSchema);
 
 app.get("/voters", async (req, res) => {
   const voters = await voterCollection.find();
@@ -101,10 +100,10 @@ app.get("/get-candidates", async (req, res) => {
   return res.json(candidatesList);
 });
 
-app.get("/ctf-public-keys", async (req, res) => {
-  const keys = await CTFCollection.find();
-  return res.json(keys);
-});
+// app.get("/ctf-public-keys", async (req, res) => {
+//   const keys = await CTFCollection.find();
+//   return res.json(keys);
+// });
 
 app.get("/get-voterid", async (req, res) => {
   const voterID = generateVoterID();
@@ -117,7 +116,9 @@ app.post("/register", async (req, res) => {
     voterID: req.body.voterID,
   });
   await newVoter.save();
-  return res.json("Voter registered Successfully!!!");
+  return res.json(
+    "You have been registered successfully. Please keep the voterID stored securely as it will be used while voting."
+  );
 });
 
 app.post("/cast-vote", async (req, res) => {
@@ -125,7 +126,7 @@ app.post("/cast-vote", async (req, res) => {
   const vote = req.body.votedFor;
   // const voteID = req.body.votedForCandidateID; /* Add candidateID for casting vote instead of name*/
 
-  let registeredVoters = await voterCollection.find();
+  const registeredVoters = await voterCollection.find();
   let eligible = false;
   for (let i = 0; i < registeredVoters.length; ++i) {
     if (
