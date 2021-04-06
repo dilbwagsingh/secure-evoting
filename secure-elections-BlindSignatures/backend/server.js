@@ -70,16 +70,9 @@ const voterSchema = new Schema({
     default: false,
   },
 });
-// const CTFSchema = new Schema({
-//   signingKeyPublic: String,
-//   signingKeyPrivate: String,
-//   castingKeyPublic: String,
-//   castingKeyPrivate: String,
-// });
 
 const candidateCollection = mongoose.model("Result", candidateSchema);
 const voterCollection = mongoose.model("Voter", voterSchema);
-// const CTFCollection = mongoose.model("CTF", CTFSchema);
 
 app.get("/voters", async (req, res) => {
   const voters = await voterCollection.find();
@@ -99,11 +92,6 @@ app.get("/get-candidates", async (req, res) => {
   const candidatesList = await candidateCollection.find();
   return res.json(candidatesList);
 });
-
-// app.get("/ctf-public-keys", async (req, res) => {
-//   const keys = await CTFCollection.find();
-//   return res.json(keys);
-// });
 
 app.get("/get-voterid", async (req, res) => {
   const voterID = generateVoterID();
@@ -134,8 +122,7 @@ app.post("/register", async (req, res) => {
 
 app.post("/cast-vote", async (req, res) => {
   const voterID = req.body.voterID;
-  // const vote = req.body.votedFor;
-  const votedForCandidateID = req.body.candidateID.toString(); /* Add candidateID for casting vote instead of name*/
+  const votedForCandidateID = req.body.candidateID.toString();
 
   const registeredVoters = await voterCollection.find();
   let eligible = false;
