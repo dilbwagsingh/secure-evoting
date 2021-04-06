@@ -134,8 +134,8 @@ app.post("/register", async (req, res) => {
 
 app.post("/cast-vote", async (req, res) => {
   const voterID = req.body.voterID;
-  const vote = req.body.votedFor;
-  // const voteID = req.body.votedForCandidateID; /* Add candidateID for casting vote instead of name*/
+  // const vote = req.body.votedFor;
+  const votedForCandidateID = req.body.candidateID.toString(); /* Add candidateID for casting vote instead of name*/
 
   const registeredVoters = await voterCollection.find();
   let eligible = false;
@@ -146,18 +146,19 @@ app.post("/cast-vote", async (req, res) => {
     )
       eligible = true;
   }
-  if (eligible) {
-    console.log("You are eligible to vote...Proceeding further...");
-  } else {
+  if (!eligible)
     return res.json("Either you already voted or you are not registered!!!");
-  }
 
   const { signingKey, CTFKey } = generateCTFKeys();
   const publicKeyCTF = new nodeRSA(CTFKey.exportKey("public"));
   const privateKeyCTF = new nodeRSA(CTFKey.exportKey("private"));
   const n_CTF = signingKey.keyPair.n.toString();
   const e_CTF = signingKey.keyPair.e.toString();
-  const { blindedVote, blindingFactor } = blindVote(vote, n_CTF, e_CTF);
+  const { blindedVote, blindingFactor } = blindVote(
+    votedForCandidateID,
+    n_CTF,
+    e_CTF
+  );
 
   const signedBlindedVote = signBlindedVote(blindedVote, signingKey);
 
@@ -166,7 +167,7 @@ app.post("/cast-vote", async (req, res) => {
     blindingFactor,
     n_CTF,
     e_CTF,
-    vote
+    votedForCandidateID
   );
 
   const signatureOk = value.ok;

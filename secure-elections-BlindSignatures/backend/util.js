@@ -43,7 +43,7 @@ const unblindAndVerifySignature = (
   blindingFactor,
   n_CTF,
   e_CTF,
-  vote
+  votedForCandidateID
 ) => {
   const signedUnblindedVote = BS.unblind({
     signed: signedBlindedVote,
@@ -55,7 +55,7 @@ const unblindAndVerifySignature = (
     unblinded: signedUnblindedVote,
     N: n_CTF,
     E: e_CTF,
-    message: vote,
+    message: votedForCandidateID,
   });
 
   return { ok, signedUnblindedVote };
@@ -87,7 +87,7 @@ const verifySignatureCTF = (candidateVotedFor, signingKey, candidatesList) => {
     const ok = BS.verify2({
       unblinded: candidateVotedFor,
       key: signingKey,
-      message: candidate.candidateName,
+      message: candidate.candidateID.toString(),
     });
     if (ok) votedCandidateID = candidate.candidateID;
     verdict |= ok;

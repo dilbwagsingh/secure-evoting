@@ -12,8 +12,10 @@ const generateVoterID = () => {
 
 // console.log(generateVoterID().length);
 
+const a = 1;
+
 const voter = {
-  vote: "Bhuvam Bam",
+  vote: a.toString(),
   voterID: generateVoterID(),
   n_CTF: null,
   e_CTF: null,
