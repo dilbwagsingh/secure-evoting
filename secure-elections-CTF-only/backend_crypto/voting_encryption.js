@@ -1,23 +1,22 @@
-const CTF = require('./key_generation_CTF');
-var nodeRSA = require('node-rsa');
-var crypto = require('crypto');
-var backend = require('./backend');
+const nodeRSA = require("node-rsa");
+const crypto = require("crypto");
 
-module.exports = function(msg, prKey){
-    //signing
-    this.signer = crypto.createSign('RSA-SHA256');
-    this.signer.write(msg);
-    this.signer.end();
+const signAndEncrypt = (candidateID, voterPrKey, CTFPubKey) => {
+  //sign using voter's private key
+  const sign = crypto.createSign("RSA-SHA256");
+  sign.write(candidateID);
+  sign.end();
+  const signature = sign.sign(voterPrKey, "base64");
 
-    //signature
-    this.signature = this.signer.sign(prKey, 'base64');
+  const msg = candidateID + signature;
 
-    //encrypt using CTF's public key
-    this.message = this.msg + this.signature;
-    this.pubCTF = new nodeRSA(CTF.puCTF);
-    this.encrypted = pubCTF.encrypt(message, 'base64');
+  // encrypt using CTF's public key
+  const pubKey = new nodeRSA(CTFPubKey);
+  const encrypted = pubKey.encrypt(msg, "base64");
 
-    this.digi_encrypted = function(){
-        return this.encrypted;
-    }
-}
+  return encrypted;
+};
+
+module.exports = {
+  signAndEncrypt,
+};

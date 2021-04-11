@@ -1,32 +1,22 @@
-const CTF = require('./key_generation_CTF');
-var nodeRSA = require('node-rsa');
-var crypto = require('crypto');
-var backend = require('./backend');
+const nodeRSA = require("node-rsa");
+const crypto = require("crypto");
 
-module.exports = function(cipher, puKey, voterID){
+const decryptAndVerify = (msg, voterPubKey, cPrKey) => {
+  // decrypt using CTF's private key
+  const CTFPrKey = new nodeRSA(cPrKey);
+  const vote = CTFPrKey.decrypt(msg, "utf-8");
 
-    //decrypt using CTF's private key
-    this.priCTF = new nodeRSA(CTF.prCTF);
-    this.decrypted = priCTF.decrypt(cipher, 'utf8');
+  const candidateID = vote.substr(0, 64);
+  const signature = vote.substr(64, vote.length);
 
-    // split cipher into msg and digital signature
-    this.msg = this.decrypted.substr(0,64);
-    this.digi_sign = this.decrypted.substr(64, this.decrypted.length);
+  //verification
+  const verifier = crypto.createVerify("RSA-SHA256");
+  verifier.write(candidateID);
+  verifier.end();
 
-    //verification
-    this.verifier = crypto.createVerify('RSA-SHA256');
-    this.verifier.write(this.msg);
-    this.verifier.end();
+  const result = verifier.verify(voterPubKey, signature, "base64");
 
-    this.result = this.verifier.verify(puKey, this.digi_sign, 'base64');
+  return result;
+};
 
-    this.digi_decrypted = function(){
-        if(this.result == true){
-            backend.candidates[this.msg].totalvotes++;
-            backend.voters[voterID].vote_attempts++;
-        }
-        else{
-            return "Incorrect";
-        }
-    }
-}
+module.exports = { decryptAndVerify };
