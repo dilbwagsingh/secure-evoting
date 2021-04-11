@@ -1,27 +1,3 @@
-/* 
-  CTF has the Database stored
-  Database model- (say name is blindSecureElections)
-  We require 2 collections -> one for results and one for voters
-  Results will have 2 fields -> candidate name and votes received till now
-  voters will have 3 fields -> Name(String), VoterId(String) and voteCasted(boolean, default to false)
-
-  Frontend architechture-
-  A get-signed votes from CTF page which has a form asking for voterID, and vote
-
-  
-  On clicking vote->
-    the vote will be blinded and sent to CTF
-    CTF will sign the vote
-    vote will be unblinded
-    sign of CTF will be verified
-    encrypt the vote with voterID and cast it
-    CTF decrypts the vote
-    checks if the voterId is registered
-    Then records the vote and updates database.
-  
-
-*/
-
 const express = require("express");
 const mongoose = require("mongoose");
 const nodeRSA = require("node-rsa");
@@ -74,7 +50,7 @@ const voterSchema = new Schema({
 const candidateCollection = mongoose.model("Result", candidateSchema);
 const voterCollection = mongoose.model("Voter", voterSchema);
 
-app.get("/voters", async (req, res) => {
+app.get("/get-voters", async (req, res) => {
   const voters = await voterCollection.find();
   return res.json(voters);
 });
