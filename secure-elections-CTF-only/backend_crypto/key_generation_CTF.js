@@ -1,11 +1,12 @@
-const nodeRSA = require('node-rsa');
+const nodeRSA = require("node-rsa");
 
-const key = new nodeRSA({b : 1024});
+const getKeys = () => {
+  const key = new nodeRSA({ b: 1024 });
 
-const puCTF = key.exportKey('public');
-const prCTF = key.exportKey('private');
+  const CTFPubKey = key.exportKey("public");
+  const CTFPrKey = key.exportKey("private");
 
-let public = new nodeRSA(puCTF);
-let private = new nodeRSA(prCTF);
+  return { CTFPubKey, CTFPrKey };
+};
 
-module.exports = {puCTF, prCTF};
+module.exports = { getKeys };

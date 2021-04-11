@@ -1,178 +1,147 @@
-const http = require('http')
+const express = require("express");
+const mongoose = require("mongoose");
 
-var express = require('express')
-const router = express.Router();
-const CTF = require('./key_generation_CTF');
-var keyGen = require('./key_generation_voter');
-var hashGen = require('./hash');
-var encryption = require('./voting_encryption');
-var decryption = require('./voting_decryption');
-// var jsbn = require('jsbn')
-var body = require('body-parser')
+const { getKeys } = require("./key_generation_CTF");
+const keygenVoter = require("./key_generation_voter");
+const { hash } = require("./hash");
+const { signAndEncrypt } = require("./voting_encryption");
+const { decryptAndVerify } = require("./voting_decryption");
 
-var app = express()
+const app = express();
+app.use(express.json());
+const PORT = 3001;
 
-const port = 3000
-let cur_voter="";
-let voters={};
-let candidates={};
-// let creator_perm=0;
+const db = "mongodb://localhost:27017/CTFOnlySecureElections";
+const Schema = mongoose.Schema;
+mongoose
+  .connect(db, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+  })
+  .then(() => {
+    console.log("------------Connected to MongoDB--------------");
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
-module.exports = {voters, candidates};
+const voterSchema = new Schema({
+  voterName: String,
+  voterID: String,
+  voterPublicKey: String,
+  voteCasted: {
+    type: Boolean,
+    default: false,
+  },
+});
+const candidateSchema = new Schema({
+  candidateName: String,
+  candidateID: String,
+  votesReceived: {
+    type: Number,
+    default: 0,
+  },
+});
 
-app.get('/', function(req, res) {
-    res.send('EVoting: Backend Server')
-})
+const candidateCollection = mongoose.model("Result", candidateSchema);
+const voterCollection = mongoose.model("Voter", voterSchema);
 
-app.listen(port, function(res) {
-    console.log('EVoting: Backend Server Listening on Port ' + port)
-})
+app.get("/voters", async (req, res) => {
+  const voters = await voterCollection.find();
+  return res.json(voters);
+});
 
-app.use(body.urlencoded({ extended: false }));
-app.use(body.json());
+app.get("/candidates", async (req, res) => {
+  const candidatesList = await candidateCollection.find();
+  return res.json(candidatesList);
+});
 
-app.get('/register', function(req,res){
-    // if(voter){
-    //     // redirect to voter registration and vote page
-    // }
-    // else{
-    //     // redirect to administrator registration who would add candidates
-    // }
-    res.send('Working');
-})
+app.post("/add-candidate", async (req, res) => {
+  const candidateName = req.body.candidateName;
+  const candidateID = hash(req.body.candidateID);
+  const newCandidate = new candidateCollection({
+    candidateName: candidateName,
+    candidateID: candidateID,
+  });
 
-app.get('/voter_register/:id', function(req, res) {
-    let voterID=req.params.id;
-    //let sessionID = session_id;
-    // let password=req.params.psw;
-    // let permsn = req.params.perm; 
-    if((voterID in voters)){
-        res.send('Already registered');
+  const allCandidates = await candidateCollection.find();
+  for (let i = 0; i < allCandidates.length; ++i) {
+    if (allCandidates[i].candidateID === candidateID) {
+      return res.json("This candidate ID has been used already");
     }
-    else {
-        var keys = new keyGen();
-        var private_key = keys.pr();
-        voters[voterID] = {
-            // psw: password,
-            // perm: permsn,
-            public_key: keys.pu(),
-            vote_attempts: 0
-        }
-        res.send('Successfully registered!\nYour private key is :\n' +private_key +'\nStore your key safely!');
-    }
-})
+  }
 
-app.get('/admin_register/:id', function(req, res) {
-    let voterID=req.params.id;
-    // let password=req.params.psw;
-    // let permsn = req.params.perm; 
-    if((voterID in voters)){
-        res.send('Already registered');
-    }
-    else {
-        var keys = new keyGen();
-        var private_key = keys.pr();
-        voters[voterID] = {
-            // psw: password,
-            // perm: permsn,
-            public_key: keys.pu(),
-            vote_attempts: 0
-        }
-        // generate session link and send as response
-        res.send('Successfully registered!\nYour private key is :\n' +private_key +'\nStore your key safely!');
-    }
-})
+  await newCandidate.save();
+  return res.json("New candidate resigtered");
+});
 
-app.get('/add_candidate/:C/:name', function(req, res) {
-    let voterID=cur_voter;
-    let candidateID=req.params.C;
-    let candidateName = req.params.name;
-        // if(voterID == ""){
-        //     res.send("login first");
-        // }
-    var hash = new hashGen(candidateID);
-    var canIDhash = hash.hash();
-    if(canIDhash in candidates){
-        res.send("Candidate already present");
-    }   
-    else{
-        candidates[canIDhash]={
-            name : candidateName,
-            totalvotes:0
-        };
-        res.send('Candidate added successfully!');
-        // if(creator_perm == 1){           
-        //     candidates[candidate]={totalvotes:0};
-        //     res.send('candidate added succesfully!');
-        // }
-        // else{
-        //     res.send("You are not permitted to add candidate");
-        // }
-    } 
-})
+app.post("/register", async (req, res) => {
+  const voterName = req.body.voterName;
+  const voterID = hash(req.body.voterID);
+  const voters = await voterCollection.find({ voterID: voterID });
+  if (voters.length) return res.json("This voter ID is already taken");
 
-// app.get('/login/:id/:psw', function(req, res) {
-//     let voterID=req.params.id;
-//     let password=req.params.psw;
-//     if(voters[voterID].psw == password){
-//         cur_voter = voterID;
-//         creator_perm = voters[voterID].perm;
-//         res.send('Logged in with ' + voterID);
-//     }
-//     else if(voterID in voters) res.send('wrong Id or Password');
-//     else{
-//         res.send("Not registered yet");
-//     }
-// })
-app.get('/vote/:candidateID/:prkey', function(req, res) {
-    let voterID=cur_voter;
-   // let password=req.params.psw;
-    //let candidate=req.params.candidateID;
-    //let private_key = req.params.prkey;
-    if(voterID == ""){
-        res.send("Enter ID");
-    }
-    else if(voters[voterID].vote_attempts == 0){            
-        // candidates[candidate].totalvotes++;
-        // voters[voterID].vote_attempts++;
-        // res.send('Your Vote has been counted');
-        var hash = new hashGen(req.params.candidateID);
-        var canIDhash = hash.hash();
-        var encrypt = new encryption(canIDhash, req.params.prkey);
-        var cipher = encrypt.digi_encrypted();
+  const keys = new keygenVoter();
+  const voterPrivateKey = keys.pr().toString();
+  const voterPublicKey = keys.pu().toString();
+  const newVoter = new voterCollection({
+    voterName: voterName,
+    voterID: voterID,
+    voterPublicKey: voterPublicKey,
+  });
 
-        var decrypt = new decryption(cipher, voters[voterID].public_key, voterID);
-        encrypt.digi_encrypted();
-    }
-    else if(voters[voterID].vote_attempts>0){
-        res.send("You have reached your max voting attempts");
-    } 
-    else{
-        res.send('Invalid voter');
-    }
-})
+  const allVoters = await voterCollection.find();
+  for (let i = 0; i < allVoters.length; i++) {
+    const element = allVoters[i].voterID;
+    if (element.voterID === voterID)
+      return res.json("This voter ID is already taken");
+  }
 
-app.get('/total_votes/:C', function(req, res) {
-    let voterID=cur_voter;
-    let candidate=req.params.C;
-        if(voterID == ""){
-            res.send("login first");
-        }
-        else if(candidate in candidates){
-            res.send((candidates[candidate].totalvotes).toString());
-        }   
-        else{
-             res.send("Invalid Candidate");  
-        } 
-})
-// app.get('/logout', function(req, res) {
-//     if(cur_voter == ""){
-//         res.send("no login so no logout");
-//     }
-//     else{
-//         cur_voter="";
-//         creator_perm=0;
-//         res.send('logged out');
-//     }
-// })
-app.use("/", router);
+  await newVoter.save();
+  return res.json(
+    `Voter registered Successfully!!!\nPlease copy the below mentioned Private Key and keep it safe.\n${voterPrivateKey}`
+  );
+});
+
+app.post("/vote", async function (req, res) {
+  const voterID = hash(req.body.voterID);
+  const voterPrivateKey = req.body.voterPrivateKey;
+  /* No hash here because we will get the hashed version itself */
+  const candidateID = req.body.candidateID;
+  const { CTFPubKey, CTFPrKey } = getKeys();
+
+  const voter = await voterCollection.find({ voterID: voterID });
+
+  let eligible = false;
+  if (voter.length && !voter[0].voteCasted) eligible = true;
+  if (!eligible)
+    return res.json("Either you already voted or you are not registered!!!");
+
+  const queryObject = await voterCollection.find(
+    { voterID: voterID },
+    "voterPublicKey"
+  );
+  const voterPublicKey = queryObject[0].voterPublicKey;
+  const vote = signAndEncrypt(candidateID, voterPrivateKey, CTFPubKey);
+  const result = decryptAndVerify(vote, voterPublicKey, CTFPrKey);
+
+  if (result) {
+    await candidateCollection.findOneAndUpdate(
+      { candidateID: candidateID },
+      { $inc: { votesReceived: 1 } }
+    );
+    await voterCollection.findOneAndUpdate(
+      { voterID: voterID },
+      { voteCasted: true }
+    );
+  } else {
+    return res.json("Voting failed");
+  }
+
+  return res.json("Vote Casted");
+});
+
+app.listen(PORT, () => {
+  console.log("EVoting: Backend Server Listening on Port " + PORT);
+});
