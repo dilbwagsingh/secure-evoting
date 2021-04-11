@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Candidate from "./Candidate";
 import axios from "axios";
 
-export default class Results extends Component {
+export default class Candidates extends Component {
   constructor(props) {
     super(props);
 

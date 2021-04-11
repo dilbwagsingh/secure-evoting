@@ -1,15 +1,13 @@
 import React, { Component } from "react";
 import axios from "axios";
-import styles from "./form.module.css";
 
-export default class Vote extends Component {
+export default class Admin extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      votedFor: "",
       candidateID: "",
-      voterID: "",
+      candidateName: "",
     };
   }
 
@@ -20,27 +18,25 @@ export default class Vote extends Component {
     });
   };
 
-  onCastVoteHandler = (event) => {
+  addCandidateHandler = (event) => {
     event.preventDefault();
-    // console.log(this.state);
     axios
-      .post("/cast-vote", this.state)
+      .post("/add-candidate", this.state)
       .then((response) => console.log(response))
       .catch((error) => console.log(error));
   };
 
   render() {
-    const { votedFor, candidateID, voterID } = this.state;
     return (
-      <div className={styles.container}>
-        <h3>Voting Draft:</h3>
-        <form onSubmit={this.onCastVoteHandler}>
-          <label>Candidate Name:</label> <br />
+      <div>
+        <h3>Add Candidate:</h3>
+        <form onSubmit={this.addCandidateHandler}>
+          <label>Candidate name:</label> <br />
           <input
             type="text"
-            id="votedFor"
-            name="votedFor"
-            value={votedFor}
+            id="candidateName"
+            name="candidateName"
+            value={this.state.candidateName}
             onChange={this.onChangeHandler}
             spellCheck="false"
           />
@@ -50,22 +46,12 @@ export default class Vote extends Component {
             type="text"
             id="candidateID"
             name="candidateID"
-            value={candidateID}
+            value={this.state.candidateID}
             onChange={this.onChangeHandler}
             spellCheck="false"
           />
           <br />
-          <label>Your Voter ID:</label> <br />
-          <input
-            type="text"
-            id="voterID"
-            name="voterID"
-            value={voterID}
-            onChange={this.onChangeHandler}
-            spellCheck="false"
-          />
-          <br />
-          <button>Vote</button>
+          <button>Add</button>
         </form>
       </div>
     );

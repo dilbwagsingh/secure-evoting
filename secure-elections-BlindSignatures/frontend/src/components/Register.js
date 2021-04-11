@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
-import styles from "./form.module.css";
+import styles from "./Form.module.css";
 
 export default class Register extends Component {
   constructor() {

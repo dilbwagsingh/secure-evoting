@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./navbar.module.css";
+import styles from "./Navbar.module.css";
 import { NavLink } from "react-router-dom";
 
 function Navbar() {
@@ -17,7 +17,10 @@ function Navbar() {
             <NavLink to="/vote">Vote</NavLink>
           </li>
           <li>
-            <NavLink to="/results">Results</NavLink>
+            <NavLink to="/voters">Voters</NavLink>
+          </li>
+          <li>
+            <NavLink to="/candidates">Candidates</NavLink>
           </li>
           <li>
             <NavLink to="/admin">Admin</NavLink>
