@@ -1,0 +1,37 @@
+@import url("https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&family=Oswald:wght@300&display=swap");
+
+table {
+  font-family: "Oswald", sans-serif;
+  font-size: 0.8rem;
+  border-collapse: collapse;
+  width: 50%;
+  margin: 2rem 0;
+  padding: 0;
+  border-radius: 3px;
+}
+
+table td {
+  padding: 3px;
+  color: #797066;
+}
+
+table tr:nth-child(even) {
+  background-color: #0d1312;
+}
+
+table tr:nth-child(odd) {
+  background-color: #131812;
+}
+
+table tr:hover {
+  background-color: #000;
+}
+
+table th {
+  font-family: "Amatic SC", cursive;
+  font-size: 1.1rem;
+  padding: 12px 0px;
+  text-align: center;
+  background-color: #b38150;
+  color: #3c3020;
+}

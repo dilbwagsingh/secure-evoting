@@ -1,5 +1,6 @@
 import React, { useMemo } from "react";
 import { useTable } from "react-table";
+import "./table.css";
 
 export default function Table({ COLUMNS, DATA }) {
   const columns = useMemo(() => COLUMNS, [COLUMNS]);

@@ -19,9 +19,9 @@ export default class Voters extends Component {
         const data = response.data;
         data.forEach((voter) => {
           voters.push({
-            voterID: voter.voterID,
+            voterID: voter.voterID.substr(0, 10) + "...",
             voterName: voter.voterName,
-            voteCasted: voter.voteCasted ? "Yes" : "No",
+            voteCasted: voter.voteCasted ? "Voted" : "Not voted",
           });
         });
 

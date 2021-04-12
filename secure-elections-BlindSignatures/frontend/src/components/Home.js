@@ -1,8 +1,9 @@
 import React from "react";
+import styles from "./Home.module.css";
 
 function Home() {
   return (
-    <div>
+    <div className={styles.container}>
       <p>
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cupiditate
         tempora illo beatae nam perferendis praesentium delectus quidem

@@ -8,22 +8,34 @@ function Navbar() {
       <nav>
         <ul className={styles.nav_links}>
           <li>
-            <NavLink to="/">Home</NavLink>
+            <NavLink exact to="/" activeClassName={styles.activeTab}>
+              Home
+            </NavLink>
           </li>
           <li>
-            <NavLink to="/register">Register</NavLink>
+            <NavLink to="/register" activeClassName={styles.activeTab}>
+              Register
+            </NavLink>
           </li>
           <li>
-            <NavLink to="/vote">Vote</NavLink>
+            <NavLink to="/vote" activeClassName={styles.activeTab}>
+              Vote
+            </NavLink>
           </li>
           <li>
-            <NavLink to="/voters">Voters</NavLink>
+            <NavLink to="/voters" activeClassName={styles.activeTab}>
+              Voters
+            </NavLink>
           </li>
           <li>
-            <NavLink to="/candidates">Results</NavLink>
+            <NavLink to="/candidates" activeClassName={styles.activeTab}>
+              Results
+            </NavLink>
           </li>
           <li>
-            <NavLink to="/admin">Admin</NavLink>
+            <NavLink to="/admin" activeClassName={styles.activeTab}>
+              Admin
+            </NavLink>
           </li>
         </ul>
       </nav>

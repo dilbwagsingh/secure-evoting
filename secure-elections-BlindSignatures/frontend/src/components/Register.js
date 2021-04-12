@@ -93,10 +93,9 @@ export default class Register extends Component {
               value={this.state.voterID ?? ""}
               spellCheck="false"
               readOnly={true}
-              placeholder="Click the generate button to get your voter ID"
-              className={styles.generatebtn}
+              placeholder="Click on the button to get your voter ID"
             />
-            <button onClick={this.getVoterIDHandler}>Generate</button>
+            <button onClick={this.getVoterIDHandler}>Get</button>
           </div>
           <button className={styles.submitbtn}>Register</button>
         </form>
