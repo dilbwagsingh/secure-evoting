@@ -32,7 +32,7 @@ mongoose
 
 const candidateSchema = new Schema({
   candidateName: String,
-  candidateID: Number,
+  candidateID: String,
   votesReceived: {
     type: Number,
     default: 0,
@@ -92,25 +92,40 @@ app.post("/register", async (req, res) => {
   });
   await newVoter.save();
   return res.json(
-    "You have been registered successfully. Please keep the voterID stored securely as it will be used while voting."
+    "You have been registered successfully. Please keep the voter ID private."
   );
 });
 
 app.post("/cast-vote", async (req, res) => {
   const voterID = req.body.voterID;
-  const votedForCandidateID = req.body.candidateID.toString();
+  const votedForCandidateID = req.body.candidateID;
+  const votedForCandidateName = req.body.votedFor;
 
   const registeredVoters = await voterCollection.find();
+  const registeredCandidates = await candidateCollection.find();
   let eligible = false;
   for (let i = 0; i < registeredVoters.length; ++i) {
     if (
       registeredVoters[i].voterID.indexOf(voterID) >= 0 &&
       registeredVoters[i].voteCasted === false
-    )
+    ) {
       eligible = true;
+      break;
+    }
   }
-  if (!eligible)
-    return res.json("Either you already voted or you are not registered!!!");
+  if (!eligible) return res.json("Incorrect details");
+
+  eligible = false;
+  for (let i = 0; i < registeredCandidates.length; ++i) {
+    if (
+      registeredCandidates[i].candidateID.indexOf(votedForCandidateID) >= 0 &&
+      registeredCandidates[i].candidateName === votedForCandidateName
+    ) {
+      eligible = true;
+      break;
+    }
+  }
+  if (!eligible) return res.json("Incorrect details");
 
   const { signingKey, CTFKey } = generateCTFKeys();
   const publicKeyCTF = new nodeRSA(CTFKey.exportKey("public"));
