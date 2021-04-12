@@ -4,31 +4,12 @@ import styles from "./styles/Home.module.css";
 function Home() {
   return (
     <div className={styles.container}>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cupiditate
-        tempora illo beatae nam perferendis praesentium delectus quidem
-        aspernatur a accusamus odit magnam, iste inventore tenetur itaque dolor
-        amet quaerat! Eum veritatis odio sapiente quod nihil nostrum excepturi.
-        Est illo eveniet officiis impedit. Tempore magnam pariatur explicabo aut
-        libero! Dolores, hic repudiandae. Beatae earum pariatur laudantium
-        delectus, vel quod omnis? Totam magni quibusdam officia nulla est nobis,
-        reprehenderit fuga minima et! Lorem ipsum dolor sit amet, consectetur
-        adipisicing elit. Cupiditate tempora illo beatae nam perferendis
-        praesentium delectus quidem aspernatur a accusamus odit magnam, iste
-        inventore tenetur itaque dolor amet quaerat! Eum veritatis odio sapiente
-        quod nihil nostrum excepturi. Est illo eveniet officiis impedit. Tempore
-        magnam pariatur explicabo aut libero! Dolores, hic repudiandae. Beatae
-        earum pariatur laudantium delectus, vel quod omnis? Totam magni
-        quibusdam officia nulla est nobis, reprehenderit fuga minima et! Lorem
-        ipsum dolor sit amet, consectetur adipisicing elit. Cupiditate tempora
-        illo beatae nam perferendis praesentium delectus quidem aspernatur a
-        accusamus odit magnam, iste inventore tenetur itaque dolor amet quaerat!
-        Eum veritatis odio sapiente quod nihil nostrum excepturi. Est illo
-        eveniet officiis impedit. Tempore magnam pariatur explicabo aut libero!
-        Dolores, hic repudiandae. Beatae earum pariatur laudantium delectus, vel
-        quod omnis? Totam magni quibusdam officia nulla est nobis, reprehenderit
-        fuga minima et!
-      </p>
+      This is our implementation of secure elections using RSA blind signatures.
+      The main motive behind blind signatures is to decouple the voter from his
+      vote. Most of the cryptography and network security features have been
+      abstracted out. Instead, what we offer is an elegant and simple to use
+      platform to cast vote without reveleaing one's choice to the public. Feel
+      free to fiddle around to get a hang of it.
     </div>
   );
 }
