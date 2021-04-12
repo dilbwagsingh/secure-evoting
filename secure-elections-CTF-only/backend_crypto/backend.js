@@ -1,6 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
-
+const cors = require("cors");
 const { getKeys } = require("./key_generation_CTF");
 const keygenVoter = require("./key_generation_voter");
 const { hash } = require("./hash");
@@ -9,7 +9,8 @@ const { decryptAndVerify } = require("./voting_decryption");
 
 const app = express();
 app.use(express.json());
-const PORT = 3001;
+app.use(cors());
+const PORT = 3002;
 
 const db = "mongodb://localhost:27017/CTFOnlySecureElections";
 const Schema = mongoose.Schema;
@@ -80,7 +81,7 @@ app.post("/register", async (req, res) => {
   const voterName = req.body.voterName;
   const voterID = hash(req.body.voterID);
   const voters = await voterCollection.find({ voterID: voterID });
-  if (voters.length) return res.json("This voter ID is already taken");
+  if (voters.length) return res.json("Already Registered");
 
   const keys = new keygenVoter();
   const voterPrivateKey = keys.pr().toString();
@@ -95,12 +96,12 @@ app.post("/register", async (req, res) => {
   for (let i = 0; i < allVoters.length; i++) {
     const element = allVoters[i].voterID;
     if (element.voterID === voterID)
-      return res.json("This voter ID is already taken");
+      return res.json("Already Registered!!");
   }
 
   await newVoter.save();
   return res.json(
-    `Voter registered Successfully!!!\nPlease copy the below mentioned Private Key and keep it safe.\n${voterPrivateKey}`
+    `${voterPrivateKey}`
   );
 });
 
