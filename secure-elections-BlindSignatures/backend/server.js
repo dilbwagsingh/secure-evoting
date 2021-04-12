@@ -92,7 +92,7 @@ app.post("/register", async (req, res) => {
   });
   await newVoter.save();
   return res.json(
-    "You have been registered successfully. Please keep the voter ID private."
+    "Registered successfully. Keep the voter ID secure & private."
   );
 });
 
