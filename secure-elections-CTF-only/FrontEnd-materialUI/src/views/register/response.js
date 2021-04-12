@@ -3,6 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import styles from "assets/jss/material-kit-react/views/loginPage.js";
+import getRegResponse from 'utils/responseTokens.js';
 const useStyles = makeStyles(styles);
 export default function Response(){
     const classes = useStyles();
@@ -10,10 +11,12 @@ export default function Response(){
     setTimeout(function() {
         setCardAnimation("");
     }, 700);
+    let res=getRegResponse();
+
     return(
         <Card className={classes[cardAnimaton]}>
             <CardBody>
-                <h3>Registered!!</h3>
+                <h3>{res}</h3>
                 <p>Go to the Cast Vote Page for Casting the Vote</p>
             </CardBody>
         </Card>

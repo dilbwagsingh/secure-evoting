@@ -11,7 +11,7 @@ import Response from "views/register/response.js";
 import styles from "assets/jss/material-kit-react/views/loginPage.js";
 
 import image from "assets/img/bg7.jpg";
-
+import register from 'utils/apiCall.js';
 
 
 class Register extends React.Component {
@@ -33,14 +33,19 @@ class Register extends React.Component {
   }
   handleInput=(fullName,Email,VoterId)=>{
    // e.preventDefault();
-   console.log(fullName);
-   console.log(Email);
-   console.log(VoterId);
+   this.setState((state)=>{
+    state.fullName=fullName;
+    state.Email=Email;
+    state.VoterId=VoterId;
+    return state;
+   });
   }
   handleButton=()=>{
     let tmp=this.state;
     tmp.isRegistered=false;
+    register(this.state.fullName,this.state.Email,this.state.VoterId);
     this.setState(tmp);
+
   }
   render(){
     const {classes}=this.props;

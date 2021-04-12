@@ -3,10 +3,12 @@
   "version": "1.9.0",
   "description": "Material Kit React. Coded by Creative Tim",
   "private": true,
+  "proxy": "http://localhost:3002",
   "main": "src/index.js",
   "dependencies": {
     "@material-ui/core": "4.10.0",
     "@material-ui/icons": "4.9.1",
+    "axios": "^0.21.1",
     "classnames": "2.2.6",
     "history": "4.10.1",
     "moment": "2.26.0",
