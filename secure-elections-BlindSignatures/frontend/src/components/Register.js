@@ -30,10 +30,8 @@ export default class Register extends Component {
   notificationHandler = (msg) => {
     // Notification body.
     const notification = document.createElement("div");
-    // notification.className = "notification";
 
     notification.style.display = "flex";
-    // notification.style.maxWidth = "370px";
     notification.style.width = "370px";
     notification.style.backgroundColor = "#fff";
     notification.style.border = "2px solid #fff";
@@ -61,12 +59,12 @@ export default class Register extends Component {
 
   registerHandler = async (event) => {
     event.preventDefault();
-    const response = await axios.post("/register", this.state);
-    console.log(response);
-
-    this.notificationHandler(response.data);
-    // const span = document.createElement("span");
-    // span.innerText = response.data;
+    if (this.state.voterID !== "" && this.state.voterName !== "") {
+      const response = await axios.post("/register", this.state);
+      this.notificationHandler(response.data);
+    } else {
+      this.notificationHandler("Incorrect details");
+    }
   };
 
   render() {

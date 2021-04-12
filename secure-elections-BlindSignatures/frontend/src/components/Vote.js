@@ -54,9 +54,16 @@ export default class Vote extends Component {
 
   onCastVoteHandler = async (event) => {
     event.preventDefault();
-    // console.log(this.state);
-    const response = await axios.post("/cast-vote", this.state);
-    this.notificationHandler(response.data);
+    if (
+      this.state.candidateID !== "" &&
+      this.state.votedFor !== "" &&
+      this.state.votedFor !== ""
+    ) {
+      const response = await axios.post("/cast-vote", this.state);
+      this.notificationHandler(response.data);
+    } else {
+      this.notificationHandler("Incorrect details");
+    }
   };
 
   render() {

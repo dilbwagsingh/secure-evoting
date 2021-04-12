@@ -53,8 +53,12 @@ export default class Admin extends Component {
 
   addCandidateHandler = async (event) => {
     event.preventDefault();
-    const response = await axios.post("/add-candidate", this.state);
-    this.notificationHandler(response.data);
+    if (this.state.candidateID !== "" && this.state.candidateName !== "") {
+      const response = await axios.post("/add-candidate", this.state);
+      this.notificationHandler(response.data);
+    } else {
+      this.notificationHandler("Incorrect details");
+    }
   };
 
   render() {
