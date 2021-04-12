@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
-import styles from "./Form.module.css";
+import styles from "./styles/Form.module.css";
+import notificationHandler from "./Notification";
 
 export default class Register extends Component {
   constructor() {
@@ -27,43 +28,13 @@ export default class Register extends Component {
     });
   };
 
-  notificationHandler = (msg) => {
-    // Notification body.
-    const notification = document.createElement("div");
-
-    notification.style.display = "flex";
-    notification.style.width = "370px";
-    notification.style.backgroundColor = "#fff";
-    notification.style.border = "2px solid #fff";
-    notification.style.borderRadius = "5px";
-    notification.style.zIndex = "10000000";
-    notification.style.position = "fixed";
-    notification.style.alignItems = "center";
-    notification.style.justifyContent = "center";
-    notification.style.top = "1px";
-    notification.style.padding = "2px";
-    notification.style.right = "1px";
-
-    // Notification text.
-    const notificationText = document.createElement("p");
-    notificationText.innerHTML = msg;
-    notification.appendChild(notificationText);
-
-    // Add to current page.
-    document.body.appendChild(notification);
-
-    setTimeout(() => {
-      notification.style.display = "none";
-    }, 3000);
-  };
-
   registerHandler = async (event) => {
     event.preventDefault();
     if (this.state.voterID !== "" && this.state.voterName !== "") {
       const response = await axios.post("/register", this.state);
-      this.notificationHandler(response.data);
+      notificationHandler(response.data);
     } else {
-      this.notificationHandler("Incorrect details");
+      notificationHandler("Incorrect details");
     }
   };
 

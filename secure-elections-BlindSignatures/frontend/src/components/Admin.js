@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
-import styles from "./Form.module.css";
+import notificationHandler from "./Notification";
+import styles from "./styles/Form.module.css";
 
 export default class Admin extends Component {
   constructor(props) {
@@ -11,38 +12,6 @@ export default class Admin extends Component {
       candidateName: "",
     };
   }
-
-  notificationHandler = (msg) => {
-    // Notification body.
-    const notification = document.createElement("div");
-    // notification.className = "notification";
-
-    notification.style.display = "flex";
-    // notification.style.maxWidth = "370px";
-    notification.style.width = "370px";
-    notification.style.backgroundColor = "#fff";
-    notification.style.border = "2px solid #fff";
-    notification.style.borderRadius = "5px";
-    notification.style.zIndex = "10000000";
-    notification.style.position = "fixed";
-    notification.style.alignItems = "center";
-    notification.style.justifyContent = "center";
-    notification.style.top = "1px";
-    notification.style.padding = "2px";
-    notification.style.right = "1px";
-
-    // Notification text.
-    const notificationText = document.createElement("p");
-    notificationText.innerHTML = msg;
-    notification.appendChild(notificationText);
-
-    // Add to current page.
-    document.body.appendChild(notification);
-
-    setTimeout(() => {
-      notification.style.display = "none";
-    }, 3000);
-  };
 
   onChangeHandler = (event) => {
     event.preventDefault();
@@ -55,9 +24,9 @@ export default class Admin extends Component {
     event.preventDefault();
     if (this.state.candidateID !== "" && this.state.candidateName !== "") {
       const response = await axios.post("/add-candidate", this.state);
-      this.notificationHandler(response.data);
+      notificationHandler(response.data);
     } else {
-      this.notificationHandler("Incorrect details");
+      notificationHandler("Incorrect details");
     }
   };
 
