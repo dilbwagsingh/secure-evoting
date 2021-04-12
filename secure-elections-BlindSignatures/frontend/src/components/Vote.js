@@ -39,7 +39,7 @@ export default class Vote extends Component {
     const { votedFor, candidateID, voterID } = this.state;
     return (
       <div className={styles.container}>
-        <h3>Voting Draft:</h3>
+        <h3>Draft your vote</h3>
         <form onSubmit={this.onCastVoteHandler}>
           <div className={styles.fields}>
             <input

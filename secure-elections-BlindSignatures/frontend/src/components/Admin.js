@@ -33,7 +33,7 @@ export default class Admin extends Component {
   render() {
     return (
       <div className={styles.container}>
-        <h3>Add Candidate:</h3>
+        <h3>Add Candidate</h3>
         <form onSubmit={this.addCandidateHandler}>
           <div className={styles.fields}>
             <input

@@ -42,7 +42,7 @@ export default class Register extends Component {
     const { voterName } = this.state;
     return (
       <div className={styles.container}>
-        <h3>Fill out your details:</h3>
+        <h3>Fill your details</h3>
         <form onSubmit={this.registerHandler}>
           <div className={styles.fields}>
             <input
