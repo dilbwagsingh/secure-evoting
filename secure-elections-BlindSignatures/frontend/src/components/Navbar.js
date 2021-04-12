@@ -20,7 +20,7 @@ function Navbar() {
             <NavLink to="/voters">Voters</NavLink>
           </li>
           <li>
-            <NavLink to="/candidates">Candidates</NavLink>
+            <NavLink to="/candidates">Results</NavLink>
           </li>
           <li>
             <NavLink to="/admin">Admin</NavLink>

@@ -13,6 +13,38 @@ export default class Vote extends Component {
     };
   }
 
+  notificationHandler = (msg) => {
+    // Notification body.
+    const notification = document.createElement("div");
+    // notification.className = "notification";
+
+    notification.style.display = "flex";
+    // notification.style.maxWidth = "370px";
+    notification.style.width = "370px";
+    notification.style.backgroundColor = "#fff";
+    notification.style.border = "2px solid #fff";
+    notification.style.borderRadius = "5px";
+    notification.style.zIndex = "10000000";
+    notification.style.position = "fixed";
+    notification.style.alignItems = "center";
+    notification.style.justifyContent = "center";
+    notification.style.top = "1px";
+    notification.style.padding = "2px";
+    notification.style.right = "1px";
+
+    // Notification text.
+    const notificationText = document.createElement("p");
+    notificationText.innerHTML = msg;
+    notification.appendChild(notificationText);
+
+    // Add to current page.
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+      notification.style.display = "none";
+    }, 3000);
+  };
+
   onChangeHandler = (event) => {
     event.preventDefault();
     this.setState({
@@ -20,13 +52,11 @@ export default class Vote extends Component {
     });
   };
 
-  onCastVoteHandler = (event) => {
+  onCastVoteHandler = async (event) => {
     event.preventDefault();
     // console.log(this.state);
-    axios
-      .post("/cast-vote", this.state)
-      .then((response) => console.log(response))
-      .catch((error) => console.log(error));
+    const response = await axios.post("/cast-vote", this.state);
+    this.notificationHandler(response.data);
   };
 
   render() {
@@ -35,37 +65,36 @@ export default class Vote extends Component {
       <div className={styles.container}>
         <h3>Voting Draft:</h3>
         <form onSubmit={this.onCastVoteHandler}>
-          <label>Candidate Name:</label> <br />
-          <input
-            type="text"
-            id="votedFor"
-            name="votedFor"
-            value={votedFor}
-            onChange={this.onChangeHandler}
-            spellCheck="false"
-          />
-          <br />
-          <label>Candidate ID:</label> <br />
-          <input
-            type="text"
-            id="candidateID"
-            name="candidateID"
-            value={candidateID}
-            onChange={this.onChangeHandler}
-            spellCheck="false"
-          />
-          <br />
-          <label>Your Voter ID:</label> <br />
-          <input
-            type="text"
-            id="voterID"
-            name="voterID"
-            value={voterID}
-            onChange={this.onChangeHandler}
-            spellCheck="false"
-          />
-          <br />
-          <button>Vote</button>
+          <div className={styles.fields}>
+            <input
+              type="text"
+              id="votedFor"
+              name="votedFor"
+              value={votedFor}
+              onChange={this.onChangeHandler}
+              spellCheck="false"
+              placeholder="Candidate Name"
+            />
+            <input
+              type="text"
+              id="candidateID"
+              name="candidateID"
+              value={candidateID}
+              onChange={this.onChangeHandler}
+              spellCheck="false"
+              placeholder="Candidate ID"
+            />
+            <input
+              type="text"
+              id="voterID"
+              name="voterID"
+              value={voterID}
+              onChange={this.onChangeHandler}
+              spellCheck="false"
+              placeholder="Voter ID"
+            />
+          </div>
+          <button className={styles.submitbtn}>Vote</button>
         </form>
       </div>
     );

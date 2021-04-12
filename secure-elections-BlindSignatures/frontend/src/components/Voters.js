@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Voter from "./Voter";
+import Table from "./Table";
 import axios from "axios";
 
 export default class Voters extends Component {
@@ -15,14 +15,13 @@ export default class Voters extends Component {
     axios
       .get("/get-voters")
       .then((response) => {
-        // console.log(response.data);
         const voters = [];
         const data = response.data;
         data.forEach((voter) => {
           voters.push({
             voterID: voter.voterID,
             voterName: voter.voterName,
-            voteCasted: voter.voteCasted,
+            voteCasted: voter.voteCasted ? "Yes" : "No",
           });
         });
 
@@ -40,10 +39,21 @@ export default class Voters extends Component {
   };
 
   render() {
-    const voterElements = this.state.voterList.map((voter) => {
-      return <Voter key={voter.voterID} voter={voter} />;
-    });
+    const COLUMNS = [
+      {
+        Header: "Voter ID",
+        accessor: "voterID",
+      },
+      {
+        Header: "Voter Name",
+        accessor: "voterName",
+      },
+      {
+        Header: "Voting Status",
+        accessor: "voteCasted",
+      },
+    ];
 
-    return <div>{voterElements}</div>;
+    return <Table COLUMNS={COLUMNS} DATA={this.state.voterList} />;
   }
 }

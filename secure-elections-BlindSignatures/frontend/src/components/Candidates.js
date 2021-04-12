@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Candidate from "./Candidate";
+import Table from "./Table";
 import axios from "axios";
 
 export default class Candidates extends Component {
@@ -47,12 +47,20 @@ export default class Candidates extends Component {
   };
 
   render() {
-    const candidateElements = this.state.candidateList.map((candidate) => {
-      return (
-        // console.log(candidate)
-        <Candidate key={candidate.candidateID} candidate={candidate} />
-      );
-    });
-    return <div>{candidateElements}</div>;
+    const COLUMNS = [
+      {
+        Header: "Candidate ID",
+        accessor: "candidateID",
+      },
+      {
+        Header: "Candidate Name",
+        accessor: "candidateName",
+      },
+      {
+        Header: "Votes Received",
+        accessor: "votesReceived",
+      },
+    ];
+    return <Table COLUMNS={COLUMNS} DATA={this.state.candidateList} />;
   }
 }
