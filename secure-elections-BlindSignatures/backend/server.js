@@ -56,9 +56,17 @@ app.get("/get-voters", async (req, res) => {
 });
 
 app.post("/add-candidate", async (req, res) => {
+  const candidateID = req.body.candidateID;
+  const candidateName = req.body.candidateName;
+  const registeredCandidates = await candidateCollection.find();
+  for (let i = 0; i < registeredCandidates.length; ++i) {
+    if (registeredCandidates[i].candidateID === candidateID) {
+      return res.json("Incorrect details");
+    }
+  }
   const newCandidate = new candidateCollection({
-    candidateName: req.body.candidateName,
-    candidateID: req.body.candidateID,
+    candidateName: candidateName,
+    candidateID: candidateID,
   });
   await newCandidate.save();
   return res.json("New candidate resigtered");
@@ -84,7 +92,7 @@ app.post("/register", async (req, res) => {
     if (registeredVoter.voterID === voterID) isNewVoter = false;
   });
 
-  if (!isNewVoter) return res.json("Already registered!!!");
+  if (!isNewVoter) return res.json("Already registered");
 
   const newVoter = new voterCollection({
     voterName: voterName,
@@ -113,7 +121,7 @@ app.post("/cast-vote", async (req, res) => {
       break;
     }
   }
-  if (!eligible) return res.json("Incorrect details");
+  if (!eligible) return res.json("Not eligible");
 
   eligible = false;
   for (let i = 0; i < registeredCandidates.length; ++i) {

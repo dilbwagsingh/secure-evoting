@@ -2,7 +2,7 @@ const BS = require("blind-signatures");
 const nodeRSA = require("node-rsa");
 const { createHash } = require("crypto");
 
-// retruns a voterID which has a fixed length of 64
+// returns a voterID which has a fixed length of 64
 const generateVoterID = () => {
   const RANGE = 2 ** 53;
   const x = Math.floor(Math.random() * RANGE);
@@ -13,7 +13,7 @@ const generateVoterID = () => {
 const generateCTFKeys = () => {
   const signingKey = BS.keyGeneration({
     b: 1024,
-  }); /* Weird bug- if you reduce the key soze to say 128/256 bits the verification in the later stage fails(the ok variable below) */
+  }); /* Weird bug- if you reduce the key size to say 128/256 bits the verification in the later stage fails(the ok variable below) */
   const CTFKey = new nodeRSA({ b: 1024 });
 
   return { signingKey, CTFKey };
