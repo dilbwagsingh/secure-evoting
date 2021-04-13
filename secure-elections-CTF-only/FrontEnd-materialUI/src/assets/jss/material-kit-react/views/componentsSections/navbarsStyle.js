@@ -1,6 +1,6 @@
 import { container, title } from "assets/jss/material-kit-react.js";
 import headerLinksStyle from "assets/jss/material-kit-react/components/headerLinksStyle.js";
-
+import modalStyle from "assets/jss/material-kit-react/modalStyle.js";
 const navbarsStyle = theme => ({
   section: {
     padding: "70px 0",
@@ -51,7 +51,32 @@ const navbarsStyle = theme => ({
     top: "4px",
     borderRadius: "50%",
     marginLeft: "5px"
-  }
+  },
+  space50: {
+    height: "50px",
+    display: "block"
+  },
+  space70: {
+    height: "70px",
+    display: "block"
+  },
+  space100: {
+    height: "100px",
+    display: "block"
+  },
+  space200: {
+    height: "200px",
+    display: "block"
+  },
+  space300: {
+    height: "300px",
+    display: "block"
+  },
+  space400: {
+    height: "400px",
+    display: "block"
+  },
+  ...modalStyle
 });
 
 export default navbarsStyle;

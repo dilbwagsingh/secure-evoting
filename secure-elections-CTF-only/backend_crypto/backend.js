@@ -74,7 +74,7 @@ app.post("/add-candidate", async (req, res) => {
   }
 
   await newCandidate.save();
-  return res.json("New candidate resigtered");
+  return res.json("New candidate registered");
 });
 
 app.post("/register", async (req, res) => {

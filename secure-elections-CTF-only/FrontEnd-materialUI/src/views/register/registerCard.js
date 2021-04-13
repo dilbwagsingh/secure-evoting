@@ -9,7 +9,6 @@ import CustomInput from "components/CustomInput/CustomInput.js";
 import styles from "assets/jss/material-kit-react/views/loginPage.js";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Icon from "@material-ui/core/Icon";
-import Email from "@material-ui/icons/Email";
 import People from "@material-ui/icons/People";
 const useStyles = makeStyles(styles);
 export default function RegisterCard(props){
@@ -17,22 +16,12 @@ export default function RegisterCard(props){
     const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
     const [state, setState] = React.useState({
       fullName:'',
-      Email:'',
       VoterId:''
     });
     const handleChange=(e)=>{
       //console.log(e.target.value);
       //console.log(e.target.type);
-      if(e.target.type === 'email'){
-        //console.log(e.target.value);
-        let val = e.target.value;
-        setState((state)=>{
-          state.Email = val;
-         // console.log(state.fullName);
-          return state;
-        });
-      }
-      else if(e.target.type === 'text'){
+      if(e.target.type === 'text'){
         let val = e.target.value;
         setState((state)=>{
           state.fullName = val;
@@ -47,7 +36,8 @@ export default function RegisterCard(props){
           return state;
         });
       }
-      props.onChange(state.fullName,state.Email,state.VoterId);
+      //console.log(state);
+      props.onChange(state.fullName,state.VoterId);
     }
     setTimeout(function() {
         setCardAnimation("");
@@ -55,7 +45,7 @@ export default function RegisterCard(props){
     return(
         <Card className={classes[cardAnimaton]}>
                 <form className={classes.form}>
-                  <CardHeader color="info" className={classes.cardHeader}>
+                  <CardHeader color="primary" className={classes.cardHeader}>
                     <h4>Register</h4>
                   </CardHeader>
                   <CardBody>
@@ -72,25 +62,9 @@ export default function RegisterCard(props){
                             <People className={classes.inputIconsColor} />
                           </InputAdornment>
                         ),
-                        onChange: handleChange
+                        onChange: handleChange,
+                        required: true
                        // value: state.fullName
-                      }}
-                    />
-                    <CustomInput
-                      labelText="Email..."
-                      id="email"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        type: "email",
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            <Email className={classes.inputIconsColor} />
-                          </InputAdornment>
-                        ),
-                        //value: state.Email,
-                        onChange: handleChange
                       }}
                     />
                     <CustomInput
@@ -110,7 +84,8 @@ export default function RegisterCard(props){
                         ),
                         autoComplete: "off",
                        // value: state.VoterId,
-                        onChange: handleChange
+                        onChange: handleChange,
+                        required: true
                       }}
                     />
                   </CardBody>

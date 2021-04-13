@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import styles from "assets/jss/material-kit-react/views/loginPage.js";
-import getRegResponse from 'utils/responseTokens.js';
+import ResponseTokens from 'utils/responseTokens.js';
 const useStyles = makeStyles(styles);
 export default function Response(){
     const classes = useStyles();
@@ -11,12 +11,46 @@ export default function Response(){
     setTimeout(function() {
         setCardAnimation("");
     }, 700);
-    let res=getRegResponse();
-
+    const [res,setRes]=React.useState(null);
+    ResponseTokens.getRegResponse()
+    .then((reg)=>{
+        setRes(reg);
+        
+    })
+    .catch((err)=>{
+        console.log(err);
+    });
+    function applyContent(res){
+        let content=null;
+        if(res === 'Already Registered'){
+            content=(
+            <>
+            <h2>{res}</h2>
+            </>
+            );
+        }
+        else{
+            content=(
+                <>
+                <h2>
+                    Here is Your Private Key. 
+                </h2>
+                <p>
+                    {res}
+                </p>
+                <p>
+                    Copy this Vote and use it For Casting Vote.
+                </p>
+                </>
+            );
+        }
+        return content;
+    }
+    const comp=applyContent(res);
     return(
         <Card className={classes[cardAnimaton]}>
             <CardBody>
-                <h3>{res}</h3>
+                <div>{comp}</div>
                 <p>Go to the Cast Vote Page for Casting the Vote</p>
             </CardBody>
         </Card>

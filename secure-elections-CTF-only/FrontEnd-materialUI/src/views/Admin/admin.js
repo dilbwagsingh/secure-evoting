@@ -8,14 +8,14 @@ import { makeStyles } from "@material-ui/core/styles";
 import styles from "assets/jss/material-kit-react/views/componentsSections/navbarsStyle.js";
 
 const useStyles = makeStyles(styles);
-export default function Home() {
+export default function Admin() {
   const classes = useStyles();
   return (
     <div>
         <div className={classes.space100} />
         <div className={classes.section}>
             <div className={classes.container}>
-                <p>this is home page</p>
+                <p>this is Admin page</p>
             </div>
         </div>
     </div>

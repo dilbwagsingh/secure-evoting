@@ -38,7 +38,8 @@ const modalStyle = {
     paddingRight: "24px",
     paddingBottom: "16px",
     paddingLeft: "24px",
-    position: "relative"
+    position: "relative",
+    width: "540px"
   },
   modalFooter: {
     padding: "15px",

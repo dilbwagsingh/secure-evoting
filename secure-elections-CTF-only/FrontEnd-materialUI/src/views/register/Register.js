@@ -9,9 +9,9 @@ import GridItem from "components/Grid/GridItem.js";
 import RegisterCard from "views/register/registerCard.js";
 import Response from "views/register/response.js";
 import styles from "assets/jss/material-kit-react/views/loginPage.js";
-
+import ResponseTokens from "utils/responseTokens.js";
 import image from "assets/img/bg7.jpg";
-import register from 'utils/apiCall.js';
+import ApiCalls from 'utils/apiCall.js';
 
 
 class Register extends React.Component {
@@ -26,25 +26,38 @@ class Register extends React.Component {
     this.state={
       isRegistered: true,
       fullName:"",
-      Email:"",
       VoterId:""
     }
     this.register = (<RegisterCard onClick={this.handleButton} onChange={this.handleInput}/>);
   }
-  handleInput=(fullName,Email,VoterId)=>{
+  handleInput=(fullName,VoterId)=>{
    // e.preventDefault();
    this.setState((state)=>{
     state.fullName=fullName;
-    state.Email=Email;
     state.VoterId=VoterId;
     return state;
    });
+   console.log(this.state);
   }
   handleButton=()=>{
     let tmp=this.state;
     tmp.isRegistered=false;
-    register(this.state.fullName,this.state.Email,this.state.VoterId);
-    this.setState(tmp);
+    ApiCalls.register(this.state.fullName,this.state.VoterId)
+    .then((data)=>{
+      //console.log(data);
+      ResponseTokens.setRegResponse(data)
+      .then(()=>{
+        console.log(data);
+        this.setState(tmp);
+      })
+      .catch((err)=>{
+        console.log(err);
+      });
+      
+    })
+     .catch((err)=>{
+       console.log(err);
+     }); 
 
   }
   render(){
@@ -56,6 +69,7 @@ class Register extends React.Component {
         style={{
           backgroundImage: "url(" + image + ")",
           backgroundSize: "cover",
+          backgroundAttachment:"fixed",
           backgroundPosition: "top center"
         }}
       >

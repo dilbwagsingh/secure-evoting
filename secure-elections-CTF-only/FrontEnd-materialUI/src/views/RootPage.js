@@ -13,50 +13,96 @@ import Home from "views/homePage/Home.js";
 import Register from "views/register/Register.js";
 import CastVote from "views/CastVote/CastVote.js";
 import Results from "views/Results/Results.js";
-
+import Admin from "views/Admin/admin.js";
+import image from "assets/img/bg7.jpg";
 import styles from "assets/jss/material-kit-react/views/componentsSections/navbarsStyle.js";
-
+import ApiCalls from "utils/apiCall.js";
 
  class RootPage extends React.Component {
    constructor(props){
      super(props);
      this.state={
-       customRender: <Home />
+       customRender: <Home />,
+       rows: []
      }
    }
   
   handleCastVote=()=>{
-    this.setState((state)=>{
-      state.customRender = <CastVote />
-    });
+    ApiCalls.getCandidates()
+      .then((candidateList)=>{
+          //console.log(candidateList);
+          this.setState((state)=>{
+            state.rows=candidateList;
+            return state;
+          });
+          this.setState((state)=>{
+            state.customRender = <CastVote rows={this.state.rows}/>
+            return state;
+          });
+     })
+      .catch((err)=>{
+        console.log(err);
+     });
+    
   }
   handleHome=()=>{
     this.setState((state)=>{
       state.customRender = <Home />
+      return state;
     });
   }
   handleRegister=()=>{
     this.setState((state)=>{
       state.customRender = <Register />
+      return state;
     });
   }
   handleResults=()=>{
+    ApiCalls.getCandidates()
+      .then((candidateList)=>{
+          //console.log(candidateList);
+          this.setState((state)=>{
+            state.rows=candidateList;
+            return state;
+          });
+          this.setState((state)=>{
+            state.customRender = <Results rows={this.state.rows}/>
+            return state;
+          });
+     })
+      .catch((err)=>{
+        console.log(err);
+     });
+  }
+  handleAdmin=()=>{
     this.setState((state)=>{
-      state.customRender = <Results />
+      state.customRender = <Admin />
     });
   }
   render(){
     const {classes}=this.props;
     return (
-      <div>
+      <div
+        className={classes.pageHeader}
+        style={{
+          backgroundImage: "url(" + image + ")",
+          backgroundSize: "cover",
+          backgroundAttachment:"fixed",
+          backgroundPosition: "top center"
+        }}
+      >
           <Header
             brand="Secure Evoting Using Blind Signatures"
-            color="info"
+            color="primary"
+            fixed
+            changeColorOnScroll={{
+                height: 50,
+                color: "transparent"
+            }}
             rightLinks={
               <List className={classes.list}>
                 <ListItem className={classes.listItem}>
                   <Button
-                    href="#pablo"
                     className={classes.navLink}
                     onClick={this.handleHome}
                     color="transparent"
@@ -67,7 +113,6 @@ import styles from "assets/jss/material-kit-react/views/componentsSections/navba
                 </ListItem>
                 <ListItem className={classes.listItem}>
                   <Button
-                    href="#pablo"
                     className={classes.navLink}
                     onClick={this.handleRegister}
                     color="transparent"
@@ -78,7 +123,6 @@ import styles from "assets/jss/material-kit-react/views/componentsSections/navba
                 </ListItem>
                 <ListItem className={classes.listItem}>
                   <Button
-                    href="#pablo"
                     className={classes.navLink}
                     onClick={this.handleCastVote}
                     color="transparent"
@@ -89,19 +133,30 @@ import styles from "assets/jss/material-kit-react/views/componentsSections/navba
                 </ListItem>
                 <ListItem className={classes.listItem}>
                   <Button
-                    href="#pablo"
                     className={classes.navLink}
-                    onClick={this.handleResults}
+                    onClick={this.handleAdmin}
                     color="transparent"
                     id="Results"
                   >
                     Results
                   </Button>
                 </ListItem>
+                <ListItem className={classes.listItem}>
+                  <Button
+                    className={classes.navLink}
+                    onClick={this.handleAdmin}
+                    color="transparent"
+                    id="Admin"
+                  >
+                    Admin
+                  </Button>
+                </ListItem>
               </List>
             }
           />
-        {this.state.customRender} 
+        <div>
+          {this.state.customRender}
+        </div> 
       </div>
   );}
 }
