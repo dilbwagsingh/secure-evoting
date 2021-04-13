@@ -52,6 +52,13 @@ input:focus {
 button {
   background: #131812;
   color: #b5824e;
+  outline: 0;
+  transition: all 0.1s ease-in;
+}
+
+button:hover {
+  background: #b5824e;
+  color: #131812;
 }
 
 button.submitbtn {

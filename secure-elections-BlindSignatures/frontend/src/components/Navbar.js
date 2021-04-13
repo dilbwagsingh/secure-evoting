@@ -29,7 +29,7 @@ function Navbar() {
           </li>
           <li>
             <NavLink to="/candidates" activeClassName={styles.activeTab}>
-              Results
+              Candidates
             </NavLink>
           </li>
           <li>

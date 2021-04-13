@@ -54,6 +54,11 @@ export default class Voters extends Component {
       },
     ];
 
-    return <Table COLUMNS={COLUMNS} DATA={this.state.voterList} />;
+    return (
+      <>
+        <h3>List of registered voters</h3>
+        <Table COLUMNS={COLUMNS} DATA={this.state.voterList} />
+      </>
+    );
   }
 }

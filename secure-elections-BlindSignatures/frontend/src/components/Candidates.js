@@ -21,7 +21,7 @@ export default class Candidates extends Component {
         data.forEach((candidate) => {
           candidates.push({
             candidateName: candidate.candidateName,
-            candidateID: candidate.candidateID ?? Math.random(),
+            candidateID: candidate.candidateID,
             votesReceived: candidate.votesReceived,
           });
         });
@@ -61,6 +61,11 @@ export default class Candidates extends Component {
         accessor: "votesReceived",
       },
     ];
-    return <Table COLUMNS={COLUMNS} DATA={this.state.candidateList} />;
+    return (
+      <>
+        <h3>List of registered candidates</h3>
+        <Table COLUMNS={COLUMNS} DATA={this.state.candidateList} />
+      </>
+    );
   }
 }
