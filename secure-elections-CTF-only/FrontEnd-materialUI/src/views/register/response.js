@@ -35,11 +35,11 @@ export default function Response(){
                 <h2>
                     Here is Your Private Key. 
                 </h2>
-                <p>
+                <pre>
                     {res}
-                </p>
+                </pre>
                 <p>
-                    Copy this Vote and use it For Casting Vote.
+                    <b>Copy this Key and use it For Casting Vote.</b>
                 </p>
                 </>
             );
@@ -51,7 +51,7 @@ export default function Response(){
         <Card className={classes[cardAnimaton]}>
             <CardBody>
                 <div>{comp}</div>
-                <p>Go to the Cast Vote Page for Casting the Vote</p>
+                <p><b>Go to the Cast Vote Page for Casting the Vote.</b></p>
             </CardBody>
         </Card>
     );

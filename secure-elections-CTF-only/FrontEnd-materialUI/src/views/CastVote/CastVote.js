@@ -58,7 +58,7 @@ export default function CastVote(props) {
     const error={
       prKey:''
     }
-    if(key===''){
+    if(touched && key===''){
       error.prKey='This Feild cannot be Empty';
     }
     if(error.prKey === '' && !canVote){
@@ -142,6 +142,7 @@ export default function CastVote(props) {
                       id="message"
                       value={privateKey}
                       required
+                      multiline
                       onChange={handleOnChange}
                       variant="filled"
                       label="Private Key"

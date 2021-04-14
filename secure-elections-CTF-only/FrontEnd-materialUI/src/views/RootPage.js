@@ -95,7 +95,7 @@ import ApiCalls from "utils/apiCall.js";
         }}
       >
           <Header
-            brand="Secure Evoting Using Blind Signatures"
+            brand="Secure Evoting Using Simplistic Voting Protocol #2"
             color="primary"
             fixed
             changeColorOnScroll={{

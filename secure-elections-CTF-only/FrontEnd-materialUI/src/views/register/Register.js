@@ -47,7 +47,7 @@ class Register extends React.Component {
     localStorage.setItem("voterID", this.state.VoterId);
     ApiCalls.register(this.state.fullName,this.state.VoterId)
     .then((data)=>{
-      //console.log(data);
+      ///console.log(data);
       ResponseTokens.setRegResponse(data)
       .then(()=>{
         //console.log(data);
@@ -78,7 +78,7 @@ class Register extends React.Component {
       >
         <div className={classes.container}>
           <GridContainer justify="center">
-            <GridItem xs={12} sm={12} md={4}>
+            <GridItem xs={12} sm={12} md={8}>
             {!(this.state.isRegistered) && this.response}
               {this.state.isRegistered && this.register}
               

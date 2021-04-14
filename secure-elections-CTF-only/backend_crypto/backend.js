@@ -1,6 +1,5 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const cors = require("cors");
 const { getKeys } = require("./key_generation_CTF");
 const keygenVoter = require("./key_generation_voter");
 const { hash } = require("./hash");
@@ -9,7 +8,6 @@ const { decryptAndVerify } = require("./voting_decryption");
 
 const app = express();
 app.use(express.json());
-app.use(cors());
 const PORT = 5000;
 
 const db = "mongodb://localhost:27017/CTFOnlySecureElections";
@@ -112,9 +110,8 @@ app.post("/vote", async function (req, res) {
   /* No hash here because we will get the hashed version itself */
   const candidateID = req.body.candidateID;
   const { CTFPubKey, CTFPrKey } = getKeys();
-
+  console.log(req.body);
   const voter = await voterCollection.find({ voterID: voterID });
-  console.log(req.body.voterID);
   let eligible = false;
   if (voter.length && !voter[0].voteCasted) eligible = true;
   if (!eligible)

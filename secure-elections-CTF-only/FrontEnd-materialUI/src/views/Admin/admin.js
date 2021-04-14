@@ -46,9 +46,7 @@ export default function Admin() {
     else if(e.target.id === 'candidateID'){
       let val = e.target.value;
       setCandidateID(val);
-    }
-    console.log(candidateName);
-    console.log(candidateID);
+    } 
   }
   const handleClose=()=>{
     setSuccessOpen(false);
@@ -59,10 +57,22 @@ export default function Admin() {
   const handleAddCandidate=()=>{
     ApiCalls.AddCandidate(candidateName,candidateID)
     .then((data)=>{
-      setSuccessMessage(data);
-      setSuccessOpen(true);
-      setCandidateID('');
-      setCandidateName('');
+      if(data == 'New candidate registered'){
+        setSuccessMessage(data);
+        setSuccessOpen(true);
+        setTouched({
+          candidateID: false,
+          candidateName: false
+        });
+        setCandidateID('');
+        setCandidateName('');
+      }
+      else{
+        setErrorMessage(data);
+        setErrorOpen(true);
+        setSuccessMessage('');
+        setSuccessOpen(false);
+      }
     })
     .catch((err)=>{
       setErrorMessage(err.message);
@@ -79,6 +89,7 @@ export default function Admin() {
 }, 700);
 //console.log(touched) ;
 function validate(candidateName,candidateID){
+  console.log('validate');
   const error={
     candidateName:'',
     candidateID:''
@@ -120,7 +131,7 @@ const errors = validate(candidateName,candidateID);
                   <CardBody>
                   <form className={classes.form}>
                   <TextField
-                      autoFocus
+                      
                       id="candidateName"
                       value={candidateName}
                       required
@@ -137,7 +148,7 @@ const errors = validate(candidateName,candidateID);
                       invalid={errors.candidateName !== ''?"true":"false"}
                     />
                     <TextField
-                      autoFocus
+                      
                       id="candidateID"
                       value={candidateID}
                       required

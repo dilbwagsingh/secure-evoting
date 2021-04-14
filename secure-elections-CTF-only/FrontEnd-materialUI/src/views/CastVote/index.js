@@ -22,6 +22,7 @@ export default function Vote(props) {
     const voterID=localStorage.getItem("voterID");
     ApiCalls.Vote(ID,prKey,voterID)
     .then((data)=>{
+      console.log(data);
       ResponseTokens.setVoteResponse(data)
       .then(()=>{
         setIsVotingDone(true);

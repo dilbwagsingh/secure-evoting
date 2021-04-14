@@ -43,10 +43,10 @@ export default function RegisterCard(props){
         fullName:'',
         voterID:''
       }
-      if(fullName===''){
+      if(touched.name && fullName===''){
         error.fullName='This Feild cannot be Empty';
       }
-      if(voterID===''){
+      if(touched.ID && voterID===''){
         error.voterID='This Feild cannot be Empty';
       }
       if(error.fullName === '' && error.voterID === '' && !canRegister){
@@ -70,7 +70,7 @@ export default function RegisterCard(props){
                   <CardBody>
                   <form className={classes.form}>
                   <TextField
-                      autoFocus
+                      
                       id="fullName"
                       value={fullName}
                       required
@@ -87,7 +87,7 @@ export default function RegisterCard(props){
                       invalid={errors.fullName !== ''?"true":"false"}
                     />
                      <TextField
-                      autoFocus
+                      
                       id="voterID"
                       value={voterID}
                       required
