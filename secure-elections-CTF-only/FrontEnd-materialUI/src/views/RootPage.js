@@ -11,7 +11,7 @@ import Button from "components/CustomButtons/Button.js";
 // my components
 import Home from "views/homePage/Home.js";
 import Register from "views/register/Register.js";
-import CastVote from "views/CastVote/CastVote.js";
+import Vote from "views/CastVote/index.js";
 import Results from "views/Results/Results.js";
 import Admin from "views/Admin/admin.js";
 import image from "assets/img/bg7.jpg";
@@ -36,7 +36,7 @@ import ApiCalls from "utils/apiCall.js";
             return state;
           });
           this.setState((state)=>{
-            state.customRender = <CastVote rows={this.state.rows}/>
+            state.customRender = <Vote rows={this.state.rows}/>
             return state;
           });
      })
@@ -77,6 +77,7 @@ import ApiCalls from "utils/apiCall.js";
   handleAdmin=()=>{
     this.setState((state)=>{
       state.customRender = <Admin />
+      return state;
     });
   }
   render(){
@@ -88,7 +89,9 @@ import ApiCalls from "utils/apiCall.js";
           backgroundImage: "url(" + image + ")",
           backgroundSize: "cover",
           backgroundAttachment:"fixed",
-          backgroundPosition: "top center"
+          backgroundPosition: "top center",
+          width: "100%",
+          minHeight: "100vh"
         }}
       >
           <Header
@@ -134,7 +137,7 @@ import ApiCalls from "utils/apiCall.js";
                 <ListItem className={classes.listItem}>
                   <Button
                     className={classes.navLink}
-                    onClick={this.handleAdmin}
+                    onClick={this.handleResults}
                     color="transparent"
                     id="Results"
                   >

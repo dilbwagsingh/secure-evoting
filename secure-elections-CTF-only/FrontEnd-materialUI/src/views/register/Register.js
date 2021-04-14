@@ -37,17 +37,20 @@ class Register extends React.Component {
     state.VoterId=VoterId;
     return state;
    });
+   
    console.log(this.state);
   }
   handleButton=()=>{
     let tmp=this.state;
     tmp.isRegistered=false;
+    localStorage.setItem("fullName", this.state.fullName);
+    localStorage.setItem("voterID", this.state.VoterId);
     ApiCalls.register(this.state.fullName,this.state.VoterId)
     .then((data)=>{
       //console.log(data);
       ResponseTokens.setRegResponse(data)
       .then(()=>{
-        console.log(data);
+        //console.log(data);
         this.setState(tmp);
       })
       .catch((err)=>{

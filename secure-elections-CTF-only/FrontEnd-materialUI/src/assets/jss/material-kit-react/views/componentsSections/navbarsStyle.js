@@ -76,6 +76,10 @@ const navbarsStyle = theme => ({
     height: "400px",
     display: "block"
   },
+  cardHidden: {
+    opacity: "0",
+    transform: "translate3d(0, -60px, 0)"
+  },
   ...modalStyle
 });
 

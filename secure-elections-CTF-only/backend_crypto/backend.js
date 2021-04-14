@@ -10,7 +10,7 @@ const { decryptAndVerify } = require("./voting_decryption");
 const app = express();
 app.use(express.json());
 app.use(cors());
-const PORT = 3002;
+const PORT = 5000;
 
 const db = "mongodb://localhost:27017/CTFOnlySecureElections";
 const Schema = mongoose.Schema;
@@ -100,6 +100,7 @@ app.post("/register", async (req, res) => {
   }
 
   await newVoter.save();
+  console.log(req.body.voterID);
   return res.json(
     `${voterPrivateKey}`
   );
@@ -113,7 +114,7 @@ app.post("/vote", async function (req, res) {
   const { CTFPubKey, CTFPrKey } = getKeys();
 
   const voter = await voterCollection.find({ voterID: voterID });
-
+  console.log(req.body.voterID);
   let eligible = false;
   if (voter.length && !voter[0].voteCasted) eligible = true;
   if (!eligible)

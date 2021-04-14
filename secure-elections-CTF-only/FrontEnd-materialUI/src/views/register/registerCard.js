@@ -5,96 +5,112 @@ import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardFooter from "components/Card/CardFooter.js";
-import CustomInput from "components/CustomInput/CustomInput.js";
 import styles from "assets/jss/material-kit-react/views/loginPage.js";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Icon from "@material-ui/core/Icon";
-import People from "@material-ui/icons/People";
+import TextField from '@material-ui/core/TextField';
 const useStyles = makeStyles(styles);
 export default function RegisterCard(props){
     const classes = useStyles();
     const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
-    const [state, setState] = React.useState({
-      fullName:'',
-      VoterId:''
+    const [fullName,setFullName]=React.useState('');
+    const [voterID,setVoterID]=React.useState('');
+    const [touched,setTouched]=React.useState({
+      name: false,
+      ID: false
     });
+    const [canRegister,setCanRegister]=React.useState(false);
     const handleChange=(e)=>{
+      //e.prevenDefault();
       //console.log(e.target.value);
       //console.log(e.target.type);
-      if(e.target.type === 'text'){
+      if(e.target.id === 'fullName'){
         let val = e.target.value;
-        setState((state)=>{
-          state.fullName = val;
-         // console.log(state.fullName);
-          return state;
-        });
+        setFullName(val);
       }
-      else if(e.target.type === 'password'){
+      else if(e.target.id === 'voterID'){
         let val = e.target.value;
-        setState((state)=>{
-          state.VoterId = val
-          return state;
-        });
+        setVoterID(val);
       }
       //console.log(state);
-      props.onChange(state.fullName,state.VoterId);
+      props.onChange(fullName,voterID);
     }
+    const handleBlur=(feild)=>()=>{
+      setTouched({...touched,[feild]:true});
+    }
+    function validate(fullName,voterID){
+      const error={
+        fullName:'',
+        voterID:''
+      }
+      if(fullName===''){
+        error.fullName='This Feild cannot be Empty';
+      }
+      if(voterID===''){
+        error.voterID='This Feild cannot be Empty';
+      }
+      if(error.fullName === '' && error.voterID === '' && !canRegister){
+        setCanRegister(true);
+      }
+      if(error.fullName !== '' && error.voterID !== '' && canRegister){
+        setCanRegister(false);
+      }
+      return error;
+    }
+    const errors = validate(fullName,voterID);
     setTimeout(function() {
         setCardAnimation("");
     }, 700);
     return(
         <Card className={classes[cardAnimaton]}>
-                <form className={classes.form}>
+                
                   <CardHeader color="primary" className={classes.cardHeader}>
                     <h4>Register</h4>
                   </CardHeader>
                   <CardBody>
-                    <CustomInput
-                      labelText="Full Name..."
-                      id="first"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        type: "text",
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            <People className={classes.inputIconsColor} />
-                          </InputAdornment>
-                        ),
-                        onChange: handleChange,
-                        required: true
-                       // value: state.fullName
-                      }}
+                  <form className={classes.form}>
+                  <TextField
+                      autoFocus
+                      id="fullName"
+                      value={fullName}
+                      required
+                      onChange={handleChange}
+                      variant="standard"
+                      label="Full Name ..."
+                      fullWidth
+                      helperText={
+                        "This feild can't be left Empty."
+                      }
+                      error={Boolean(touched.name && errors.fullName)}
+                      onBlur={handleBlur('name')}
+                      valid={errors.fullName === ''?"true":"false"}
+                      invalid={errors.fullName !== ''?"true":"false"}
                     />
-                    <CustomInput
-                      labelText="Voter ID..."
-                      id="pass"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        type: "password",
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            <Icon className={classes.inputIconsColor}>
-                              lock_outline
-                            </Icon>
-                          </InputAdornment>
-                        ),
-                        autoComplete: "off",
-                       // value: state.VoterId,
-                        onChange: handleChange,
-                        required: true
-                      }}
+                     <TextField
+                      autoFocus
+                      id="voterID"
+                      value={voterID}
+                      required
+                      onChange={handleChange}
+                      variant="standard"
+                      label="VoterID"
+                      fullWidth
+                      helperText={
+                        "This feild can't be left Empty."
+                      }
+                      error={Boolean(touched.ID && errors.voterID)}
+                      onBlur={handleBlur('ID')}
+                      valid={errors.voterID === ''?"true":"false"}
+                      invalid={errors.voterID !== ''?"true":"false"}
                     />
+                    </form>
                   </CardBody>
                   <CardFooter className={classes.cardFooter}>
-                    <Button simple color="primary" size="lg" onClick={props.onClick}>
+                    <Button simple color="primary" size="lg" onClick={props.onClick} disabled={!canRegister}>
                       Register
                     </Button>
                   </CardFooter>
-                </form>
+                
               </Card>
     );
 }
