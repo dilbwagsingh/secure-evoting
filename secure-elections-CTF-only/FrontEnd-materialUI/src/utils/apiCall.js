@@ -85,8 +85,24 @@ class apiCalls{
       console.log(error)
       reject(error);
     })
+  });
+  getVoters=()=> new Promise((resolve,reject)=>{
+    axios.get('/voters')
+    .then(response =>{
+    //setRegResponse(response.data);
+      if(response){
+      //console.log(response.data);
+        resolve(response.data)
+      }
+      else{
+        reject(response);
+      }
+    })
+    .catch(error =>{
+      console.log(error)
+      reject(error);
+    });
   })
-
 }
 const ApiCalls=new apiCalls();
 export default ApiCalls;

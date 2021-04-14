@@ -17,13 +17,14 @@ import Admin from "views/Admin/admin.js";
 import image from "assets/img/bg7.jpg";
 import styles from "assets/jss/material-kit-react/views/componentsSections/navbarsStyle.js";
 import ApiCalls from "utils/apiCall.js";
-
+import Voters from "views/Voters/voters.js";
  class RootPage extends React.Component {
    constructor(props){
      super(props);
      this.state={
        customRender: <Home />,
-       rows: []
+       rows: [],
+       votersRows: []
      }
    }
   
@@ -67,6 +68,23 @@ import ApiCalls from "utils/apiCall.js";
           });
           this.setState((state)=>{
             state.customRender = <Results rows={this.state.rows}/>
+            return state;
+          });
+     })
+      .catch((err)=>{
+        console.log(err);
+     });
+  }
+  handleVoters=()=>{
+    ApiCalls.getVoters()
+      .then((voters)=>{
+          //console.log(voters);
+          this.setState((state)=>{
+            state.votersRows=voters;
+            return state;
+          });
+          this.setState((state)=>{
+            state.customRender = <Voters rows={this.state.votersRows}/>
             return state;
           });
      })
@@ -142,6 +160,16 @@ import ApiCalls from "utils/apiCall.js";
                     id="Results"
                   >
                     Results
+                  </Button>
+                </ListItem>
+                <ListItem className={classes.listItem}>
+                  <Button
+                    className={classes.navLink}
+                    onClick={this.handleVoters}
+                    color="transparent"
+                    id="Voters"
+                  >
+                    Voters
                   </Button>
                 </ListItem>
                 <ListItem className={classes.listItem}>
