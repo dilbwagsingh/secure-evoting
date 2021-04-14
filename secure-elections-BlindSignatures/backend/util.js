@@ -61,22 +61,11 @@ const unblindAndVerifySignature = (
   return { ok, signedUnblindedVote };
 };
 
-const verifyVoteFormat = (decryptedVote, registeredVoters) => {
+const verifyVoteFormat = (decryptedVote) => {
   const receivedVoterID = decryptedVote.slice(0, 64);
   const candidateVotedFor = decryptedVote.slice(64);
 
-  let registered = false;
-  registeredVoters.forEach((registeredVoter) => {
-    if (registeredVoter.voterID.indexOf(receivedVoterID) !== -1) {
-      registered = true;
-    }
-  });
-
-  if (registered) {
-    return { registered, receivedVoterID, candidateVotedFor };
-  }
-
-  return { registered: false, receivedVoterID: null, candidateVotedFor: null };
+  return { receivedVoterID, candidateVotedFor };
 };
 
 const verifySignatureCTF = (candidateVotedFor, signingKey, candidatesList) => {

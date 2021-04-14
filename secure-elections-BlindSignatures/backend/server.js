@@ -168,32 +168,29 @@ app.post("/cast-vote", async (req, res) => {
   const encryptedVote = publicKeyCTF.encrypt(voteString, "base64");
 
   const decryptedVote = privateKeyCTF.decrypt(encryptedVote, "utf-8");
-  const { registered, receivedVoterID, candidateVotedFor } = verifyVoteFormat(
-    decryptedVote,
-    registeredVoters
+  const { receivedVoterID, candidateVotedFor } = verifyVoteFormat(
+    decryptedVote
   );
 
-  if (registered) {
-    const candidatesList = await candidateCollection.find();
-    const { verdict, votedCandidateID } = verifySignatureCTF(
-      candidateVotedFor,
-      signingKey,
-      candidatesList
-    );
+  const candidatesList = await candidateCollection.find();
+  const { verdict, votedCandidateID } = verifySignatureCTF(
+    candidateVotedFor,
+    signingKey,
+    candidatesList
+  );
 
-    if (verdict) {
-      // update candidate vote count in DB
-      await candidateCollection.findOneAndUpdate(
-        { candidateID: votedCandidateID },
-        { $inc: { votesReceived: 1 } }
-      );
-      // update voter's voted status
-      await voterCollection.findOneAndUpdate(
-        { voterID: receivedVoterID },
-        { voteCasted: true }
-      );
-      return res.json("Successful!!!");
-    }
+  if (verdict) {
+    // update candidate vote count in DB
+    await candidateCollection.findOneAndUpdate(
+      { candidateID: votedCandidateID },
+      { $inc: { votesReceived: 1 } }
+    );
+    // update voter's voted status
+    await voterCollection.findOneAndUpdate(
+      { voterID: receivedVoterID },
+      { voteCasted: true }
+    );
+    return res.json("Successful!!!");
   }
 
   return res.json("Unsuccessful!!!");
